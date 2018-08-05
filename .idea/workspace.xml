@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bce7a03d-42fc-4c24-b5f8-a8940d4712a2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.m" afterPath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.m" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/DimPlugin.m" afterPath="$PROJECT_DIR$/ios/Classes/DimPlugin.m" />
-      <change beforePath="$PROJECT_DIR$/ios/dim.podspec" afterPath="$PROJECT_DIR$/ios/dim.podspec" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +20,8 @@
       <file leaf-file-name="dim.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/dim.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="29" column="22" lean-forward="false" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+            <state relative-caret-position="102">
+              <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -32,8 +30,8 @@
       <file leaf-file-name="main.dart" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="951">
-              <caret line="66" column="10" lean-forward="false" selection-start-line="66" selection-start-column="10" selection-end-line="66" selection-end-column="10" />
+            <state relative-caret-position="197">
+              <caret line="100" column="34" lean-forward="false" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -62,8 +60,8 @@
       <file leaf-file-name="DimPlugin.m" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ios/Classes/DimPlugin.m">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+            <state relative-caret-position="505">
+              <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -125,8 +123,9 @@
     <findStrings>
       <find>registerWith</find>
       <find>im_login</find>
-      <find>_messageStreamSubscription</find>
       <find>imLogin</find>
+      <find>_messageStreamSubscription</find>
+      <find>eventChannel</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -447,8 +446,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ios/Classes/DimPlugin.m">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+        <state relative-caret-position="505">
+          <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -479,16 +478,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/dim.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="29" column="22" lean-forward="false" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+        <state relative-caret-position="102">
+          <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="951">
-          <caret line="66" column="10" lean-forward="false" selection-start-line="66" selection-start-column="10" selection-end-line="66" selection-end-column="10" />
+        <state relative-caret-position="197">
+          <caret line="100" column="34" lean-forward="false" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="34" />
           <folding />
         </state>
       </provider>

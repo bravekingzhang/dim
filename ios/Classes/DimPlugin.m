@@ -1,16 +1,21 @@
 #import "DimPlugin.h"
 #import <IMMessageExt/IMMessageExt.h>
 
-@interface DimPlugin() <TIMUserStatusListener, TIMRefreshListener, TIMMessageListener>
+@interface DimPlugin() <TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
+@property (nonatomic, strong) FlutterEventSink eventSink;
+
 @end
 
 @implementation DimPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
+  FlutterMethodChannel *channel = [FlutterMethodChannel
       methodChannelWithName:@"dim_method"
             binaryMessenger:[registrar messenger]];
   DimPlugin* instance = [[DimPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
+    
+    FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"dim_event" binaryMessenger:[registrar messenger]];
+    [eventChannel setStreamHandler:instance];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -113,11 +118,30 @@
       }];
 
   }else if([@"post_data_test" isEqualToString:call.method]){
-//      eventSink.success("hahahahha  I am from listener");
+      NSLog(@"post_data_test invoke");
+      self.eventSink(@"hahahahha  I am from listener");
   }
   else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+#pragma mark - FlutterStreamHandler
+- (FlutterError*)onListenWithArguments:(id)arguments
+                             eventSink:(FlutterEventSink)eventSink {
+    self.eventSink = eventSink;
+//    [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+//    [self sendBatteryStateEvent];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(onBatteryStateDidChange:)
+//     name:UIDeviceBatteryStateDidChangeNotification
+//     object:nil];
+    return nil;
+}
+
+- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments{
+    return nil;
 }
 
 @end
