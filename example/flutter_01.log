@@ -1,0 +1,97 @@
+Flutter crash report; please file at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter doctor
+
+## exception
+
+VersionCheckError: VersionCheckError: Command exited with code 1: git log -n 1 --pretty=format:%ad --date=iso
+Standard error: xcrun: error: active developer path ("/Applications/Xcode.app/Contents/Developer") does not exist
+Use `sudo xcode-select --switch path/to/Xcode.app` to specify the Xcode that you wish to use for command line developer tools, or use `xcode-select --install` to install the standalone command line developer tools.
+See `man xcode-select` for more details.
+
+
+```
+#0      _runSync (package:flutter_tools/src/version.dart:475:5)
+#1      FlutterVersion._latestGitCommitDate (package:flutter_tools/src/version.dart:129:12)
+#2      FlutterVersion.frameworkCommitDate (package:flutter_tools/src/version.dart:120:37)
+#3      FlutterVersion.frameworkDate (package:flutter_tools/src/version.dart:83:31)
+#4      _FlutterValidator.validate (package:flutter_tools/src/doctor.dart:286:45)
+<asynchronous suspension>
+#5      Doctor.startValidatorTasks (package:flutter_tools/src/doctor.dart:88:56)
+#6      Doctor.diagnose (package:flutter_tools/src/doctor.dart:145:41)
+<asynchronous suspension>
+#7      DoctorCommand.runCommand (package:flutter_tools/src/commands/doctor.dart:29:39)
+<asynchronous suspension>
+#8      FlutterCommand.verifyThenRunCommand (package:flutter_tools/src/runner/flutter_command.dart:347:18)
+#9      _asyncThenWrapperHelper.<anonymous closure> (dart:async/runtime/libasync_patch.dart:77:64)
+#10     _rootRunUnary (dart:async/zone.dart:1132:38)
+#11     _CustomZone.runUnary (dart:async/zone.dart:1029:19)
+#12     _FutureListener.handleValue (dart:async/future_impl.dart:129:18)
+#13     Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:642:45)
+#14     Future._propagateToListeners (dart:async/future_impl.dart:671:32)
+#15     Future._complete (dart:async/future_impl.dart:476:7)
+#16     _SyncCompleter.complete (dart:async/future_impl.dart:51:12)
+#17     _AsyncAwaitCompleter.complete.<anonymous closure> (dart:async/runtime/libasync_patch.dart:33:20)
+#18     _rootRun (dart:async/zone.dart:1124:13)
+#19     _CustomZone.run (dart:async/zone.dart:1021:19)
+#20     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:947:23)
+#21     _microtaskLoop (dart:async/schedule_microtask.dart:41:21)
+#22     _startMicrotaskLoop (dart:async/schedule_microtask.dart:50:5)
+#23     _runPendingImmediateCallback (dart:isolate/runtime/libisolate_patch.dart:113:13)
+#24     _RawReceivePortImpl._handleMessage (dart:isolate/runtime/libisolate_patch.dart:166:5)
+```
+
+## flutter doctor
+
+```
+encountered exception: VersionCheckError: Command exited with code 1: git log -n 1 --pretty=format:%ad --date=iso
+Standard error: xcrun: error: active developer path ("/Applications/Xcode.app/Contents/Developer") does not exist
+Use `sudo xcode-select --switch path/to/Xcode.app` to specify the Xcode that you wish to use for command line developer tools, or use `xcode-select --install` to install the standalone command line developer tools.
+See `man xcode-select` for more details.
+
+
+#0      _runSync (package:flutter_tools/src/version.dart:475:5)
+#1      FlutterVersion._latestGitCommitDate (package:flutter_tools/src/version.dart:129:12)
+#2      FlutterVersion.frameworkCommitDate (package:flutter_tools/src/version.dart:120:37)
+#3      FlutterVersion.frameworkDate (package:flutter_tools/src/version.dart:83:31)
+#4      _FlutterValidator.validate (package:flutter_tools/src/doctor.dart:286:45)
+<asynchronous suspension>
+#5      Doctor.startValidatorTasks (package:flutter_tools/src/doctor.dart:88:56)
+#6      Doctor.diagnose (package:flutter_tools/src/doctor.dart:145:41)
+<asynchronous suspension>
+#7      _doctorText.<anonymous closure> (package:flutter_tools/runner.dart:194:26)
+#8      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:142:29)
+<asynchronous suspension>
+#9      _rootRun (dart:async/zone.dart:1124:13)
+#10     _CustomZone.run (dart:async/zone.dart:1021:19)
+#11     _runZoned (dart:async/zone.dart:1516:10)
+#12     runZoned (dart:async/zone.dart:1463:12)
+#13     AppContext.run (package:flutter_tools/src/base/context.dart:141:18)
+<asynchronous suspension>
+#14     _doctorText (package:flutter_tools/runner.dart:193:19)
+<asynchronous suspension>
+#15     _createLocalCrashReport (package:flutter_tools/runner.dart:171:32)
+<asynchronous suspension>
+#16     _handleToolError (package:flutter_tools/runner.dart:126:33)
+<asynchronous suspension>
+#17     run.<anonymous closure> (package:flutter_tools/runner.dart:63:20)
+<asynchronous suspension>
+#18     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:142:29)
+<asynchronous suspension>
+#19     _rootRun (dart:async/zone.dart:1124:13)
+#20     _CustomZone.run (dart:async/zone.dart:1021:19)
+#21     _runZoned (dart:async/zone.dart:1516:10)
+#22     runZoned (dart:async/zone.dart:1463:12)
+#23     AppContext.run (package:flutter_tools/src/base/context.dart:141:18)
+<asynchronous suspension>
+#24     runInContext (package:flutter_tools/src/context_runner.dart:42:24)
+<asynchronous suspension>
+#25     run (package:flutter_tools/runner.dart:50:10)
+#26     main (package:flutter_tools/executable.dart:51:9)
+<asynchronous suspension>
+#27     main (file:///Users/joshuaton/Documents/Code/Flutter/flutter/packages/flutter_tools/bin/flutter_tools.dart:8:3)
+#28     _startIsolate.<anonymous closure> (dart:isolate/runtime/libisolate_patch.dart:277:32)
+#29     _RawReceivePortImpl._handleMessage (dart:isolate/runtime/libisolate_patch.dart:165:12)
+```
