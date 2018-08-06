@@ -141,7 +141,7 @@ ios端配置:
 
 1、引入的时候搜索你会发现.dylib现在变为了.tbd了。还有就是IOS模拟器跑不了，腾讯云没有提供X86的framework。
 2、注意不要引入IMUGCExt.framework,TXRTMPSDK.framework。
-3、注意，当你升级dim之后，cache对应的版本中没有这些库了，因此要在copy一份过去。
+3、注意，当你升级dim之后，cache对应的版本中没有这些库了，因此要在copy一份过去,可以直接从你之前的版本中copy，在到ios工程下执行`pod install`。
 
 ## 已有的功能
 
