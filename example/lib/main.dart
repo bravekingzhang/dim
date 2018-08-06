@@ -43,8 +43,6 @@ class _MyAppState extends State<MyApp> {
       });
     }
 
-    _dim.imLogin(23423423, "fesf", "sfesfs");
-
     setState(() {
       _platformVersion = platformVersion;
     });
@@ -71,6 +69,12 @@ class _MyAppState extends State<MyApp> {
               new Text('Running on: $_platformVersion\n'),
               RaisedButton(
                 onPressed: () {
+                  login();
+                },
+                child: Text('登录imsdk'),
+              ),
+              RaisedButton(
+                onPressed: () {
                   postData();
                 },
                 child: Text('测试发送数据'),
@@ -94,6 +98,16 @@ class _MyAppState extends State<MyApp> {
       print(result);
     } on PlatformException {
       print("listen  失败");
+    }
+  }
+
+  Future<void> login() async {
+    try {
+      var result = await _dim.imLogin(1400001533, "18681446372", "sfesfs");
+//      var result = await _dim.postDataTest();
+      print(result);
+    } on PlatformException {
+      print("登录  失败");
     }
   }
 

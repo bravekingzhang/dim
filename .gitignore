@@ -4,7 +4,7 @@
 .packages
 .pub/
 pubspec.lock
-
+.idea/
 build/
 ios/*.framework
 .idea
