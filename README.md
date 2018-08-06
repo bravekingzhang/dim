@@ -1,10 +1,24 @@
 # dim
 
-A new flutter plugin project.
+封装的一个腾讯云im，以便于flutter开发者可以方便继承im到自己的应用中
 
-## Getting Started
+## 使用之前注意事项
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
 
-For help on editing plugin code, view the [documentation](https://flutter.io/developing-packages/#edit-plugin-package).
+开发者需要到腾讯云上申请一个appid，申请[地址](https://console.cloud.tencent.com/avc)
+
+申请成功之后，平台会分配一个appid给到开发者。
+
+1、sig的获取，sig一般就是开发者自己的后台开发同学提供，可以参考腾讯云文档实现sig申请。
+
+2、都准备ok了，就可以登录imsdk了。
+
+## 已有的功能
+
+1、登录
+2、登出
+3、获取会话列表
+4、删除一个会话
+5、获取会话消息
+6、发送图片消息
+7、发送文本消息

@@ -1,8 +1,8 @@
 name: dim
-description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+description: warp tencent imsdk.
+version: 0.0.2
+author: brzhang <1595819400@qq.com>
+homepage: https://cloud.tencent.com/developer/user/1203298
 
 dependencies:
   flutter:
@@ -47,3 +47,5 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.io/custom-fonts/#from-packages
+environment:
+    sdk: ">=1.19.0 <2.0.0"
