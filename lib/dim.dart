@@ -45,14 +45,14 @@ class Dim {
     });
   }
 
-  ///获取会话列表
-  Future<dynamic> getConversations() async {
-    return await _methodChannel.invokeMethod('getConversations');
-  }
-
   ///退出IM
   Future<dynamic> sdkLogout() async {
     return await _methodChannel.invokeMethod('sdkLogout');
+  }
+
+  ///获取会话列表
+  Future<dynamic> getConversations() async {
+    return await _methodChannel.invokeMethod('getConversations');
   }
 
   ///删除会话
