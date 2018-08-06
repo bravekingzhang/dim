@@ -5,13 +5,13 @@ PODS:
 
 DEPENDENCIES:
   - dim (from `.symlinks/plugins/dim/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
 
 EXTERNAL SOURCES:
   dim:
     :path: ".symlinks/plugins/dim/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
 
 SPEC CHECKSUMS:
   dim: 853655e063e02d13c88b467aba93254904db4b8a

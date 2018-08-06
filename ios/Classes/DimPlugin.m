@@ -1,7 +1,7 @@
 #import "DimPlugin.h"
 #import <IMMessageExt/IMMessageExt.h>
 
-@interface DimPlugin() <TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
+@interface DimPlugin() <TIMConnListener, TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
 @property (nonatomic, strong) FlutterEventSink eventSink;
 
 @end
@@ -21,19 +21,22 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
 
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
-    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+      result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
   }else if([@"im_login" isEqualToString:call.method]) {
-    NSString *appid = call.arguments[@"sdkAppId"];
-    NSString *identifier = call.arguments[@"identifier"];
-    NSString *userSig = call.arguments[@"userSig"];
+      int appidInt = (int)call.arguments[@"sdkAppId"];
+      NSString *appid = [NSString stringWithFormat:@"%d", appidInt];
+      NSString *identifier = (NSString *)(call.arguments[@"identifier"]);
+      NSString *userSig = (NSString *)(call.arguments[@"userSig"]);
 
-    //初始化 SDK 基本配置
-    TIMSdkConfig *config = [TIMSdkConfig new];
+      //初始化 SDK 基本配置
+      TIMSdkConfig *config = [TIMSdkConfig new];
       config.sdkAppId = [appid intValue];
-    config.disableCrashReport = YES;
-      config.disableLogPrint = NO;
+      config.accountType = @"792";
+      config.disableCrashReport = YES;
+      config.connListener = self;
+
       //初始化 SDK
-      int initResult = [[TIMManager sharedInstance] initSdk:config];
+      [[TIMManager sharedInstance] initSdk:config];
       //将用户配置与通讯管理器进行绑定
       TIMUserConfig *userConfig = [TIMUserConfig new];
       userConfig.userStatusListener = self;
@@ -42,18 +45,18 @@
       [[TIMManager sharedInstance] addMessageListener:self];
       
       
-    TIMLoginParam *login_param = [[TIMLoginParam alloc ]init];
-    // identifier 为用户名，userSig 为用户登录凭证
-    // appidAt3rd 在私有帐号情况下，填写与 sdkAppId 一样
-    login_param.identifier = identifier;
-    login_param.userSig = userSig;
-    login_param.appidAt3rd = appid;
-    [[TIMManager sharedInstance] login: login_param succ:^(){
-        result(@"Login Succ");
-    } fail:^(int code, NSString * err) {
-        NSLog([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
-        result([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
-    }];
+        TIMLoginParam *login_param = [[TIMLoginParam alloc ]init];
+        // identifier 为用户名，userSig 为用户登录凭证
+        // appidAt3rd 在私有帐号情况下，填写与 sdkAppId 一样
+        login_param.identifier = identifier;
+        login_param.userSig = userSig;
+        login_param.appidAt3rd = appid;
+        [[TIMManager sharedInstance] login: login_param succ:^(){
+            result(@"Login Succ");
+        } fail:^(int code, NSString * err) {
+            NSLog([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
+            result([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
+        }];
   }else if([@"sdkLogout" isEqualToString:call.method]){
       [[TIMManager sharedInstance] logout:^{
           result(@"logout success");
