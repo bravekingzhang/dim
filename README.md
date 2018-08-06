@@ -136,16 +136,25 @@ ios端配置:
 这说明你本地的一些库没有引用，用xcode打开你的ios工程，然后[参考这里](https://cloud.tencent.com/document/product/269/9147)
 这里如何集成IMSDK写的很清楚，需要依赖系统的那些库。
 
-注意，引入的时候搜索你会发现.dylib现在变为了.tbd了。还有就是IOS模拟器跑不了，腾讯云没有提供X86的framework。
 
-再次run，大概就ok了。
+注意：
+
+1、引入的时候搜索你会发现.dylib现在变为了.tbd了。还有就是IOS模拟器跑不了，腾讯云没有提供X86的framework。
+2、注意不要引入IMUGCExt.framework,TXRTMPSDK.framework。
+3、注意，当你升级dim之后，cache对应的版本中没有这些库了，因此要在copy一份过去。
 
 ## 已有的功能
 
 1、登录
+
 2、登出
+
 3、获取会话列表
+
 4、删除一个会话
+
 5、获取会话消息
+
 6、发送图片消息
+
 7、发送文本消息
