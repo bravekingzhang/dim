@@ -80,6 +80,35 @@ class Dim {
         <String, dynamic>{'identifier': identifier, 'image_path': imagePath});
   }
 
+  ///添加好友
+  ///
+  Future<dynamic> addFriend(String identifier) async {
+    return await _methodChannel
+        .invokeMethod("addFriend", <String, dynamic>{'identifier': identifier});
+  }
+
+  ///删除好友
+  ///
+  Future<dynamic> delFriend(String identifier) async {
+    return await _methodChannel
+        .invokeMethod("delFriend", <String, dynamic>{'identifier': identifier});
+  }
+
+  ///获取好友列表
+  ///
+  Future<dynamic> listFriends(String identifier) async {
+    return await _methodChannel.invokeMethod(
+        "listFriends", <String, dynamic>{'identifier': identifier});
+  }
+
+  ///处理好友的请求，接受/拒绝
+  ///opTypeStr 接受传 Y
+  ///opTypeStr 拒绝传 N
+  Future<dynamic> opFriend(String identifier, String opTypeStr) async {
+    return await _methodChannel.invokeMethod("opFriend",
+        <String, dynamic>{'identifier': identifier, 'opTypeStr': opTypeStr});
+  }
+
   ///测试使用eventChannel推送数据过来
   Future<dynamic> postDataTest() async {
     return await _methodChannel.invokeMethod("post_data_test");

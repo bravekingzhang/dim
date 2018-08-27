@@ -1,0 +1,119 @@
+Flutter crash report; please file at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter build bundle --suppress-analytics --target lib/main.dart --preview-dart-2 --depfile /Users/hoollyzhang/henCode/dim/example/build/app/intermediates/flutter/debug/snapshot_blob.bin.d --asset-dir /Users/hoollyzhang/henCode/dim/example/build/app/intermediates/flutter/debug/flutter_assets --debug
+
+## exception
+
+ArgumentError: Invalid argument(s): Cannot find executable for /Users/hoollyzhang/flutter/flutter/bin/cache/dart-sdk/bin/pub.
+
+```
+#0      _getExecutable (package:process/src/interface/local_process_manager.dart:113:5)
+#1      LocalProcessManager.start (package:process/src/interface/local_process_manager.dart:41:7)
+#2      runCommand (package:flutter_tools/src/base/process.dart:115:25)
+#3      runCommandAndStreamOutput (package:flutter_tools/src/base/process.dart:133:33)
+<asynchronous suspension>
+#4      pub (package:flutter_tools/src/dart/pub.dart:155:18)
+<asynchronous suspension>
+#5      pubGet (package:flutter_tools/src/dart/pub.dart:104:13)
+<asynchronous suspension>
+#6      FlutterCommand.verifyThenRunCommand (package:flutter_tools/src/runner/flutter_command.dart:334:13)
+<asynchronous suspension>
+#7      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:282:33)
+<asynchronous suspension>
+#8      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:142:29)
+<asynchronous suspension>
+#9      _rootRun (dart:async/zone.dart:1124:13)
+#10     _CustomZone.run (dart:async/zone.dart:1021:19)
+#11     _runZoned (dart:async/zone.dart:1516:10)
+#12     runZoned (dart:async/zone.dart:1463:12)
+#13     AppContext.run (package:flutter_tools/src/base/context.dart:141:18)
+<asynchronous suspension>
+#14     FlutterCommand.run (package:flutter_tools/src/runner/flutter_command.dart:273:20)
+#15     CommandRunner.runCommand (package:args/command_runner.dart:194:27)
+<asynchronous suspension>
+#16     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:346:21)
+<asynchronous suspension>
+#17     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:142:29)
+<asynchronous suspension>
+#18     _rootRun (dart:async/zone.dart:1124:13)
+#19     _CustomZone.run (dart:async/zone.dart:1021:19)
+#20     _runZoned (dart:async/zone.dart:1516:10)
+#21     runZoned (dart:async/zone.dart:1463:12)
+#22     AppContext.run (package:flutter_tools/src/base/context.dart:141:18)
+<asynchronous suspension>
+#23     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:302:19)
+<asynchronous suspension>
+#24     CommandRunner.run.<anonymous closure> (package:args/command_runner.dart:109:29)
+#25     new Future.sync (dart:async/future.dart:224:31)
+#26     CommandRunner.run (package:args/command_runner.dart:109:11)
+#27     FlutterCommandRunner.run (package:flutter_tools/src/runner/flutter_command_runner.dart:211:18)
+#28     run.<anonymous closure> (package:flutter_tools/runner.dart:59:20)
+<asynchronous suspension>
+#29     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:142:29)
+<asynchronous suspension>
+#30     _rootRun (dart:async/zone.dart:1124:13)
+#31     _CustomZone.run (dart:async/zone.dart:1021:19)
+#32     _runZoned (dart:async/zone.dart:1516:10)
+#33     runZoned (dart:async/zone.dart:1463:12)
+#34     AppContext.run (package:flutter_tools/src/base/context.dart:141:18)
+<asynchronous suspension>
+#35     runInContext (package:flutter_tools/src/context_runner.dart:42:24)
+<asynchronous suspension>
+#36     run (package:flutter_tools/runner.dart:50:10)
+#37     main (package:flutter_tools/executable.dart:51:9)
+<asynchronous suspension>
+#38     main (file:///Users/hoollyzhang/flutter/flutter/packages/flutter_tools/bin/flutter_tools.dart:8:3)
+#39     _startIsolate.<anonymous closure> (dart:isolate/runtime/libisolate_patch.dart:284:32)
+#40     _RawReceivePortImpl._handleMessage (dart:isolate/runtime/libisolate_patch.dart:169:12)
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel master, v0.5.9-pre.10, on Mac OS X 10.13.5 17F77, locale zh-Hans-CN)
+    • Flutter version 0.5.9-pre.10 at /Users/hoollyzhang/flutter/flutter
+    • Framework revision 21f22ed3ba (2 weeks ago), 2018-08-26 19:50:02 -0400
+    • Engine revision af42b6dc95
+    • Dart version 2.0.0-dev.69.5.flutter-eab492385c
+
+[!] Android toolchain - develop for Android devices (Android SDK 28.0.0)
+    • Android SDK at /Users/hoollyzhang/Library/Android/sdk
+    • Android NDK at /Users/hoollyzhang/Library/Android/sdk/ndk-bundle
+    • Platform android-28, build-tools 28.0.0
+    • ANDROID_HOME = /Users/hoollyzhang/Library/Android/sdk
+    • Java binary at: /Applications/Android Studio.app/Contents/jre/jdk/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1024-b01)
+    ✗ Android license status unknown.
+
+[✓] iOS toolchain - develop for iOS devices (Xcode 9.4.1)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Xcode 9.4.1, Build version 9F2000
+    • ios-deploy 1.9.2
+    • CocoaPods version 1.5.3
+
+[✓] Android Studio (version 3.1)
+    • Android Studio at /Applications/Android Studio.app/Contents
+    • Flutter plugin version 26.0.1
+    • Dart plugin version 173.4700
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-1024-b01)
+
+[!] IntelliJ IDEA Ultimate Edition (version 2017.3.4)
+    • IntelliJ at /Applications/IntelliJ IDEA.app
+    ✗ Flutter plugin not installed; this adds Flutter specific functionality.
+    ✗ Dart plugin not installed; this adds Dart specific functionality.
+    • For information about installing plugins, see
+      https://flutter.io/intellij-setup/#installing-the-plugins
+
+[!] VS Code (version 1.23.1)
+    • VS Code at /Applications/Visual Studio Code.app/Contents
+    • Flutter extension not installed; install from
+      https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter
+
+[✓] Connected devices (2 available)
+    • HUAWEI NXT AL10 • 5LM7N16401002621                         • android-arm64 • Android 7.0 (API 24)
+    • 张勇的 iPhone      • c50a3c88e239175b7a126ab35c4ada3a86395abb • ios           • iOS 11.4.1
+
+! Doctor found issues in 3 categories.
+```

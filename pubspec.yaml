@@ -1,6 +1,6 @@
 name: dim
 description: warp tencent imsdk.
-version: 0.1.1
+version: 0.1.4
 author: brzhang <1595819400@qq.com>
 homepage: https://cloud.tencent.com/developer/user/1203298
 
@@ -48,4 +48,4 @@ flutter:
   # For details regarding fonts in packages, see
   # https://flutter.io/custom-fonts/#from-packages
 environment:
-    sdk: ">=1.19.0 <2.0.0"
+    sdk: ">=1.19.0 < 2.2.0"

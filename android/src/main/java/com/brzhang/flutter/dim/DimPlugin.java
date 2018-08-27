@@ -3,6 +3,8 @@ package com.brzhang.flutter.dim;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
@@ -16,11 +18,21 @@ import com.tencent.imsdk.TIMRefreshListener;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMTextElem;
 import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
+import com.tencent.imsdk.ext.sns.TIMAddFriendRequest;
+import com.tencent.imsdk.ext.sns.TIMDelFriendType;
+import com.tencent.imsdk.ext.sns.TIMFriendAddResponse;
+import com.tencent.imsdk.ext.sns.TIMFriendResponseType;
+import com.tencent.imsdk.ext.sns.TIMFriendResult;
+import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import io.flutter.plugin.common.EventChannel;
@@ -70,6 +82,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     .enableCrashReport(false)
                     .enableLogPrint(true)
                     .setLogLevel(TIMLogLevel.DEBUG)
+                    .setAccoutType("792")
                     .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/");
             //初始化 SDK
             TIMManager.getInstance().init(registrar.context(), config);
@@ -123,7 +136,12 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMManager.getInstance().addMessageListener(new TIMMessageListener() {
                 @Override
                 public boolean onNewMessages(List<TIMMessage> list) {
-                    eventSink.success(list);
+                    if (list != null && list.size() > 0) {
+                        eventSink.success(new Gson().toJson(list, new TypeToken<Collection<TIMMessage>>() {
+                        }.getType()));
+                    } else {
+                        eventSink.success("[]");
+                    }
                     return false;
                 }
             });
@@ -165,7 +183,12 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             });
         } else if (call.method.equals("getConversations")) {
             List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
-            result.success(list);
+            if (list != null && list.size() > 0) {
+                result.success(new Gson().toJson(list, new TypeToken<Collection<TIMConversation>>() {
+                }.getType()));
+            } else {
+                result.success("[]");
+            }
         } else if (call.method.equals("delConversation")) {
             String identifier = call.argument("identifier");
             TIMManagerExt.getInstance().deleteConversation(TIMConversationType.C2C, identifier);
@@ -192,6 +215,12 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                         public void onSuccess(List<TIMMessage> msgs) {//获取消息成功
                             //遍历取得的消息
                             result.success(msgs);
+                            if (msgs != null && msgs.size() > 0) {
+                                result.success(new Gson().toJson(msgs, new TypeToken<Collection<TIMMessage>>() {
+                                }.getType()));
+                            } else {
+                                result.success("[]");
+                            }
                         }
                     });
         } else if (call.method.equals("sendTextMessages")) {
@@ -260,6 +289,97 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         } else if (call.method.equals("post_data_test")) {
             Log.e(TAG, "onMethodCall() called with: call = [" + call + "], result = [" + result + "]");
             eventSink.success("hahahahha  I am from listener");
+        } else if (call.method.equals("addFriend")) {
+//创建请求列表
+            List<TIMAddFriendRequest> reqList = new ArrayList<TIMAddFriendRequest>();
+//添加好友请求
+            String identifier = call.argument("identifier");
+            TIMAddFriendRequest req = new TIMAddFriendRequest(identifier);
+//            req.setAddrSource("DemoApp");
+            req.setAddWording("请添加我");
+//            req.setRemark("Cat");
+            reqList.add(req);
+//申请添加好友
+            //申请添加好友
+            TIMFriendshipManagerExt.getInstance().addFriend(reqList, new TIMValueCallBack<List<TIMFriendResult>>() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+                    result.error(desc, String.valueOf(code), null);
+                }
+
+                @Override
+                public void onSuccess(List<TIMFriendResult> timFriendResults) {
+                    if (timFriendResults != null && timFriendResults.size() > 0) {
+                        result.success(timFriendResults.get(0).getIdentifer());
+                    }
+                }
+            });
+        } else if (call.method.equals("delFriend")) {
+            //双向删除好友 test_user
+            String identifier = call.argument("identifier");
+            TIMFriendshipManagerExt.DeleteFriendParam param = new TIMFriendshipManagerExt.DeleteFriendParam();
+            param.setType(TIMDelFriendType.TIM_FRIEND_DEL_BOTH)
+                    .setUsers(Collections.singletonList(identifier));
+
+            TIMFriendshipManagerExt.getInstance().delFriend(param, new TIMValueCallBack<List<TIMFriendResult>>() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+                    result.error(desc, String.valueOf(code), null);
+                }
+
+                @Override
+                public void onSuccess(List<TIMFriendResult> timFriendResults) {
+                    if (timFriendResults != null && timFriendResults.size() > 0) {
+                        result.success(timFriendResults.get(0).getIdentifer());
+                    }
+                }
+            });
+        } else if (call.method.equals("listFriends")) {
+            //获取好友列表
+            TIMFriendshipManagerExt.getInstance().getFriendList(new TIMValueCallBack<List<TIMUserProfile>>() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+                    result.error(desc, String.valueOf(code), null);
+                }
+
+                @Override
+                public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                    if (timUserProfiles != null && timUserProfiles.size() > 0) {
+
+                        result.success(new Gson().toJson(timUserProfiles, new TypeToken<Collection<TIMUserProfile>>() {
+                        }.getType()));
+                    } else {
+                        result.success("[]");//返回一个空的json array
+                    }
+                }
+            });
+        } else if (call.method.equals("opFriend")) {//好友申请
+            //获取好友列表
+            String identifier = call.argument("identifier");
+            String opTypeStr = call.argument("opTypeStr");
+            TIMFriendAddResponse timFriendAddResponse = new TIMFriendAddResponse(identifier);
+            if (opTypeStr.toUpperCase().trim().equals("Y")) {
+                timFriendAddResponse.setType(TIMFriendResponseType.Agree);
+            } else {
+                timFriendAddResponse.setType(TIMFriendResponseType.Reject);
+            }
+            TIMFriendshipManagerExt.getInstance().addFriendResponse(timFriendAddResponse, new TIMValueCallBack<TIMFriendResult>() {
+                @Override
+                public void onError(int i, String s) {
+                    result.error(s, String.valueOf(i), null);
+                }
+
+                @Override
+                public void onSuccess(TIMFriendResult timFriendResult) {
+                    result.success(timFriendResult.getIdentifer());
+                }
+            });
         } else {
             result.notImplemented();
         }
