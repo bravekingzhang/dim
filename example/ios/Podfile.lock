@@ -1,20 +1,20 @@
 PODS:
-  - dim (0.0.1):
+  - dim (0.1.4):
     - Flutter
   - Flutter (1.0.0)
 
 DEPENDENCIES:
   - dim (from `.symlinks/plugins/dim/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
 
 EXTERNAL SOURCES:
   dim:
     :path: ".symlinks/plugins/dim/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
 
 SPEC CHECKSUMS:
-  dim: 853655e063e02d13c88b467aba93254904db4b8a
+  dim: d44ae765f83affdb502eef5434256018f57ad60d
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
