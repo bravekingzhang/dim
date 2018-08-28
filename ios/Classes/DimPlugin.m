@@ -1,5 +1,7 @@
 #import "DimPlugin.h"
 #import <IMMessageExt/IMMessageExt.h>
+#import <IMFriendshipExt/IMFriendshipExt.h>
+#import "MJExtension.h"
 
 @interface DimPlugin() <TIMConnListener, TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
 @property (nonatomic, strong) FlutterEventSink eventSink;
@@ -54,7 +56,7 @@
         [[TIMManager sharedInstance] login: login_param succ:^(){
             result(@"Login Succ");
         } fail:^(int code, NSString * err) {
-            NSLog([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
+            NSLog(@"Login Failed: %d->%@", code, err);
             result([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
         }];
   }else if([@"sdkLogout" isEqualToString:call.method]){
@@ -64,8 +66,14 @@
           [NSString stringWithFormat:@"logout failed. code %d desc %@", code, msg];
       }];
   }else if([@"getConversations" isEqualToString:call.method]){
+      
       NSArray *conversationList = [[TIMManager sharedInstance] getConversationList];
-      result(conversationList);
+      NSArray *dictArray = [TIMConversation mj_keyValuesArrayWithObjectArray:conversationList];
+      NSError *writeError = nil;
+      NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictArray options:NSJSONWritingPrettyPrinted error:&writeError];
+      NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+      result(jsonString);
+      
   }else if([@"delConversation" isEqualToString:call.method]){
       NSString *identifier = call.arguments[@"identifier"];
       [[TIMManager sharedInstance] deleteConversation:TIM_C2C receiver:identifier];
@@ -121,8 +129,84 @@
       }];
 
   }else if([@"post_data_test" isEqualToString:call.method]){
+      
       NSLog(@"post_data_test invoke");
       self.eventSink(@"hahahahha  I am from listener");
+      
+  }else if([@"addFriend" isEqualToString:call.method]){
+      
+      NSMutableArray *users = [[NSMutableArray alloc] init];
+      TIMAddFriendRequest *req = [[TIMAddFriendRequest alloc] init];
+      req.identifier = call.arguments[@"identifier"];
+      req.addWording = [NSString stringWithUTF8String:"请添加我"];
+      [users addObject:req];
+      [[TIMFriendshipManager sharedInstance] addFriend:users succ:^(NSArray *friends) {
+          for(TIMFriendResult *res in friends){
+              if(res.status != TIM_FRIEND_STATUS_SUCC){
+                  result([NSString stringWithFormat:@"AddFriend succ: user=%@ status=%ld", res.identifier, (long)res.status]);
+              }else{
+                  result(res.identifier);
+              }
+          }
+      } fail:^(int code, NSString *msg) {
+          result([NSString stringWithFormat:@"msg:%@ code:%d", msg, code]);
+      }];
+
+  }else if([@"delFriend" isEqualToString:call.method]){
+      
+      NSMutableArray *delUsers = [[NSMutableArray alloc] init];
+      [delUsers addObject:call.arguments[@"identifier"]];
+      // TIM_FRIEND_DEL_BOTH 指定删除双向好友
+      [[TIMFriendshipManager sharedInstance] delFriend: TIM_FRIEND_DEL_BOTH users:delUsers succ:^(NSArray* arr) {
+          for (TIMFriendResult * res in arr) {
+              if (res.status != TIM_FRIEND_STATUS_SUCC) {
+                  result([NSString stringWithFormat:@"DelFriend failed: user=%@ status=%ld", res.identifier, (long)res.status]);
+              }
+              else {
+                  result(res.identifier);
+              }
+          }
+      } fail:^(int code, NSString * err) {
+          result([NSString stringWithFormat:@"DelFriend failed: code=%d err=%@", code, err]);
+      }];
+      
+  }else if([@"listFriends" isEqualToString:call.method]){
+      
+      [[TIMFriendshipManager sharedInstance] getFriendList:^(NSArray * arr) {
+//          for (TIMUserProfile *profile in arr) {
+//              NSLog(@"friend: %@", profile.identifier);
+//          }
+          NSArray *dictArray = [TIMUserProfile mj_keyValuesArrayWithObjectArray:arr];
+          NSError *writeError = nil;
+          NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictArray options:NSJSONWritingPrettyPrinted error:&writeError];
+          NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+          result(jsonString);
+          
+      }fail:^(int code, NSString * err) {
+          NSLog(@"GetFriendList fail: code=%d err=%@", code, err);;
+      }];
+      
+  }else if([@"opFriend" isEqualToString:call.method]){
+      
+      NSMutableArray *arr = [[NSMutableArray alloc] init];
+      NSString *identifier = call.arguments[@"identifier"];
+      NSString *opTypeStr = call.arguments[@"opTypeStr"];
+      TIMFriendResponse *response = [[TIMFriendResponse alloc] init];
+      response.identifier = identifier;
+      if([opTypeStr isEqualToString:@"Y"]){
+          response.responseType = TIM_FRIEND_RESPONSE_AGREE;
+      }else{
+          response.responseType = TIM_FRIEND_RESPONSE_REJECT;
+      }
+      [arr addObject:response];
+      
+      [[TIMFriendshipManager sharedInstance] addFriend:arr succ:^(NSArray *friends) {
+          for (TIMFriendResult * res in friends) {
+              result(res.identifier);
+          }
+      } fail:^(int code, NSString *msg) {
+          result([NSString stringWithFormat:@"msg:%@ code:%d", msg, code]);
+      }];
   }
   else {
     result(FlutterMethodNotImplemented);
