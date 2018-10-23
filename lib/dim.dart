@@ -80,6 +80,21 @@ class Dim {
         <String, dynamic>{'identifier': identifier, 'image_path': imagePath});
   }
 
+  ///发送位置消息
+  ///eg：
+  ///lat 113.93
+  ///lng 22.54
+  ///desc 腾讯大厦
+  Future<dynamic> sendLocationMessages(
+      String identifier, double lat, double lng, String desc) async {
+    return await _methodChannel.invokeMethod('sendLocation', <String, dynamic>{
+      'identifier': identifier,
+      'lat': lat,
+      'lng': lng,
+      'desc': desc,
+    });
+  }
+
   ///添加好友
   ///
   Future<dynamic> addFriend(String identifier) async {

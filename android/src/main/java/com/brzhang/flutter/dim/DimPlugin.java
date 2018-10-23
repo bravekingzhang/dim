@@ -10,6 +10,7 @@ import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMImageElem;
+import com.tencent.imsdk.TIMLocationElem;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
@@ -251,7 +252,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 @Override
                 public void onSuccess(TIMMessage msg) {//发送消息成功
                     Log.e(TAG, "SendMsg ok");
-                    result.success(msg);
+                    result.success("SendMsg ok");
                 }
             });
         } else if (call.method.equals("sendImageMessages")) {
@@ -286,6 +287,43 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     result.success("SendMsg ok");
                 }
             });
+        } else if (call.method.equals("sendLocation")) {
+
+            String identifier = call.argument("identifier");
+            double lat = call.argument("lat");
+            double lng = call.argument("lng");
+            String desc = call.argument("desc");
+
+            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, identifier);
+            //构造一条消息
+            TIMMessage msg = new TIMMessage();
+
+//添加位置信息
+            TIMLocationElem elem = new TIMLocationElem();
+            elem.setLatitude(lat);   //设置纬度
+            elem.setLongitude(lng);   //设置经度
+            elem.setDesc(desc);
+
+//将elem添加到消息
+            if (msg.addElement(elem) != 0) {
+                Log.d(TAG, "addElement failed");
+                return;
+            }
+//发送消息
+            conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
+                @Override
+                public void onError(int code, String desc) {//发送消息失败
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 含义请参见错误码表
+                    Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
+                }
+
+                @Override
+                public void onSuccess(TIMMessage msg) {//发送消息成功
+                    Log.e(TAG, "Send location ok");
+                }
+            });
+
         } else if (call.method.equals("post_data_test")) {
             Log.e(TAG, "onMethodCall() called with: call = [" + call + "], result = [" + result + "]");
             eventSink.success("hahahahha  I am from listener");

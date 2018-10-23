@@ -85,6 +85,24 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text('取消监听'),
               ),
+              RaisedButton(
+                onPressed: () {
+                  sendTextMsg();
+                },
+                child: Text('发送文本消息'),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  sendImageMsg();
+                },
+                child: Text('发送图片消息'),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  sendLocationMsg();
+                },
+                child: Text('发送位置消息'),
+              ),
             ],
           ),
         ),
@@ -101,10 +119,48 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+//  Future<void> login() async {
+//    try {
+//      var result = await _dim.imLogin(1400119955, "18681446372", "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
+////      var result = await _dim.postDataTest();
+//      print(result);
+//    } on PlatformException {
+//      print("登录  失败");
+//    }
+//  }
+
+  Future<void> sendTextMsg() async {
+    try {
+      var result = await _dim.sendTextMessages("rq2", "haahah");
+      print(result);
+    } on PlatformException {
+      print("发送消息失败");
+    }
+  }
+
+  Future<void> sendImageMsg() async {
+    try {
+      var result = await _dim.sendImageMessages("rq2", "tyyhuiijkoi.png");
+      print(result);
+    } on PlatformException {
+      print("发送图片消息失败");
+    }
+  }
+
+  Future<void> sendLocationMsg() async {
+    try {
+      var result =
+          await _dim.sendLocationMessages("rq2", 113.93, 22.54, "腾讯大厦");
+      print(result);
+    } on PlatformException {
+      print("发送位置消息失败");
+    }
+  }
+
   Future<void> login() async {
     try {
-      var result = await _dim.imLogin(1400001533, "18681446372", "sfesfs");
-//      var result = await _dim.postDataTest();
+      var result = await _dim.imLogin(1400117017, "rq3",
+          "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
       print(result);
     } on PlatformException {
       print("登录  失败");

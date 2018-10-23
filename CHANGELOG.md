@@ -1,3 +1,3 @@
-## 0.0.1
+## 0.1.6
 
-* TODO: Describe initial release.
+* 增加了发送位置信息的接口

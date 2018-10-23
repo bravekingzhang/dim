@@ -104,7 +104,7 @@
       TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
       //发送消息
       [conversation sendMessage:msg succ:^{
-          result(msg);
+          result(@"send message ok");
       } fail:^(int code, NSString *msg) {
           result([NSString stringWithFormat:@"send message failed. code: %d desc:%@", code, msg]);
       }];
@@ -128,7 +128,32 @@
           result([NSString stringWithFormat:@"send message failed. code: %d desc:%@", code, msg]);
       }];
 
-  }else if([@"post_data_test" isEqualToString:call.method]){
+  }else if([@"sendLocation" isEqualToString:call.method]){
+      NSString *identifier = call.arguments[@"identifier"];
+      double lat = [call.arguments[@"lat"] doubleValue];
+      double lng = [call.arguments[@"lng"] doubleValue];
+      NSString *desc = call.arguments[@"desc"];
+      //构造一条消息
+      TIMMessage *msg = [TIMMessage new];
+      
+      //添加图片
+      TIMLocationElem *elem = [TIMLocationElem new];
+      elem.latitude = lat;
+      elem.longitude = lng;
+      elem.desc = desc;
+      if([msg addElem:elem] != 0){
+          NSLog(@"addElement failed");
+      }
+      
+      TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
+      [conversation sendMessage:msg succ:^{
+          result(@"SendMsg ok");
+      } fail:^(int code, NSString *msg) {
+          result([NSString stringWithFormat:@"send message failed. code: %d desc:%@", code, msg]);
+      }];
+      
+  }
+  else if([@"post_data_test" isEqualToString:call.method]){
       
       NSLog(@"post_data_test invoke");
       self.eventSink(@"hahahahha  I am from listener");
