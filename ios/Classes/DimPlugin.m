@@ -257,4 +257,22 @@
     return nil;
 }
 
+#pragma mark - TIMMessageListener
+/**
+ *  新消息回调通知
+ *
+ *  @param msgs 新消息列表，TIMMessage 类型数组
+ */
+- (void)onNewMessage:(NSArray*)msgs{
+    if(msgs != nil && msgs.count > 0){
+        NSArray *dictArray = [TIMConversation mj_keyValuesArrayWithObjectArray:msgs];
+        NSError *writeError = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictArray options:NSJSONWritingPrettyPrinted error:&writeError];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        self.eventSink(jsonString);
+    }else{
+        self.eventSink(@"[]");
+    }
+}
+
 @end
