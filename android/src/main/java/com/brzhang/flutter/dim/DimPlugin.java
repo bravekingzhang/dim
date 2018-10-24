@@ -9,6 +9,8 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMElem;
+import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMImageElem;
 import com.tencent.imsdk.TIMLocationElem;
 import com.tencent.imsdk.TIMLogLevel;
@@ -138,7 +140,11 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 @Override
                 public boolean onNewMessages(List<TIMMessage> list) {
                     if (list != null && list.size() > 0) {
-                        eventSink.success(new Gson().toJson(list, new TypeToken<Collection<TIMMessage>>() {
+                        List<Message> messages = new ArrayList<>();
+                        for (TIMMessage timMessage : list) {
+                            messages.add(new Message(timMessage));
+                        }
+                        eventSink.success(new Gson().toJson(messages, new TypeToken<Collection<Message>>() {
                         }.getType()));
                     } else {
                         eventSink.success("[]");
@@ -431,5 +437,21 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
     @Override
     public void onCancel(Object o) {
         Log.e(TAG, "onCancel() called with: o = [" + o + "]");
+    }
+
+
+    class Message {
+        TIMUserProfile senderProfile;
+        TIMConversation timConversation;
+        TIMGroupMemberInfo timGroupMemberInfo;
+        TIMElem message;
+
+
+        Message(TIMMessage timMessage) {
+            senderProfile = timMessage.getSenderProfile();
+            timConversation = timMessage.getConversation();
+            message = timMessage.getElement(0);
+            timGroupMemberInfo = timMessage.getSenderGroupMemberProfile();
+        }
     }
 }
