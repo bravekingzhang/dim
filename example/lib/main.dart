@@ -159,8 +159,10 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> login() async {
     try {
-      var result = await _dim.imLogin(1400117017, "rq3",
-          "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
+//      var result = await _dim.imLogin(1400117017, "rq3",
+//          "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
+      var result = await _dim.imLogin(1400117017, "rq2",
+          "eJxlz01Pg0AQgOE7v4Ls2ejMwnaxSQ9Sq60W09o2QS*ElKGsHxS2SxGM-92ITSRxrs87mcynZds2W89X5-F2u69yE5mmIGYPbQbs7A*LQiVRbCJHJ-*QPgqlKYpTQ7pDFEJwgH6jEsqNStWp0CXv4SF5jboLv9suAKIElP1E7ToMJsvx7HpuKGhhJ1J3WU-Tl0E1fp6oMPPC9SNlOHiqFhftBmdhvLhSvi-L*yn4spG5vinfNGUplu2x8bmHCbmeaaugvn248zb1aNQ7adQ7nd5xgaO8dLyeHkkf1D7vAg4okDvwM8z6sr4BAlVcKw__");
       print(result);
     } on PlatformException {
       print("登录  失败");
