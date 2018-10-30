@@ -44,10 +44,9 @@ class Dim {
       'userSig': sig,
     });
   }
-
-  ///退出IM
-  Future<dynamic> sdkLogout() async {
-    return await _methodChannel.invokeMethod('sdkLogout');
+  ///im登出
+  Future<dynamic> imLogout() async {
+    return await _methodChannel.invokeMethod("im_logout");
   }
 
   ///获取会话列表

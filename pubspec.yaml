@@ -1,6 +1,6 @@
 name: dim
-description: warp tencent imsdk.
-version: 0.1.9
+description: 继承了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能，目前Android，ios都ok
+version: 0.1.11
 author: brzhang <1595819400@qq.com>
 homepage: https://cloud.tencent.com/developer/user/1203298
 

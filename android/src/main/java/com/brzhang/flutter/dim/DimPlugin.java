@@ -1,6 +1,7 @@
 package com.brzhang.flutter.dim;
 
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -52,9 +53,26 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
     private static final String TAG = "DimPlugin";
     private Registrar registrar;
     private EventChannel.EventSink eventSink;
+    private TIMMessageListener timMessageListener;
 
     public DimPlugin(Registrar registrar) {
         this.registrar = registrar;
+        timMessageListener = new TIMMessageListener() {
+            @Override
+            public boolean onNewMessages(List<TIMMessage> list) {
+                if (list != null && list.size() > 0) {
+                    List<Message> messages = new ArrayList<>();
+                    for (TIMMessage timMessage : list) {
+                        messages.add(new Message(timMessage));
+                    }
+                    eventSink.success(new Gson().toJson(messages, new TypeToken<Collection<Message>>() {
+                    }.getType()));
+                } else {
+                    eventSink.success("[]");
+                }
+                return false;
+            }
+        };
     }
 
     /**
@@ -70,13 +88,30 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         channel.setMethodCallHandler(dimPlugin);
         eventChannel.setStreamHandler(dimPlugin);
 
+
     }
 
     @Override
     public void onMethodCall(MethodCall call, final Result result) {
         if (call.method.equals("getPlatformVersion")) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
+        } else if (call.method.equals("im_logout")) {
+            TIMManager.getInstance().logout(new TIMCallBack() {
+                @Override
+                public void onError(int code, String s) {
+                    result.error("logout failed. code", code + "", s);
+                }
+
+                @Override
+                public void onSuccess() {
+                    result.success("logout success");
+                }
+            });
         } else if (call.method.equals("im_login")) {
+            if (!TextUtils.isEmpty(TIMManager.getInstance().getLoginUser())) {
+                result.error("login failed. ", "user is login", "user is already login ,you should login out first");
+                return;
+            }
             int appid = call.argument("sdkAppId");
             String identifier = call.argument("identifier");
             String userSig = call.argument("userSig");
@@ -136,23 +171,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     });
             TIMManager.getInstance().setUserConfig(userConfig);
 
-            TIMManager.getInstance().addMessageListener(new TIMMessageListener() {
-                @Override
-                public boolean onNewMessages(List<TIMMessage> list) {
-                    if (list != null && list.size() > 0) {
-                        List<Message> messages = new ArrayList<>();
-                        for (TIMMessage timMessage : list) {
-                            messages.add(new Message(timMessage));
-                        }
-                        eventSink.success(new Gson().toJson(messages, new TypeToken<Collection<Message>>() {
-                        }.getType()));
-                    } else {
-                        eventSink.success("[]");
-                    }
-                    return false;
-                }
-            });
-
+//            TIMManager.getInstance().removeMessageListener(timMessageListener);
+            TIMManager.getInstance().addMessageListener(timMessageListener);
 
             // identifier为用户名，userSig 为用户登录凭证
             TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {

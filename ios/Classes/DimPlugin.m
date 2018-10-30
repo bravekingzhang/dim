@@ -24,6 +24,12 @@
 
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
       result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+  }else if ([ @"im_logout" isEqualToString:call.method] ){
+      [[TIMManager sharedInstance] logout:^{
+          result(@"Logout Succ");
+      } fail:^(int code, NSString *msg) {
+         result([NSString stringWithFormat:@"Login Failed: %d->%@", code, msg]);
+      }];
   }else if([@"im_login" isEqualToString:call.method]) {
       int appidInt = (int)call.arguments[@"sdkAppId"];
       NSString *appid = [NSString stringWithFormat:@"%d", appidInt];
@@ -44,6 +50,7 @@
       userConfig.userStatusListener = self;
       userConfig.refreshListener = self;
       [[TIMManager sharedInstance] setUserConfig:userConfig];
+      [[TIMManager sharedInstance] removeMessageListener:self];
       [[TIMManager sharedInstance] addMessageListener:self];
       
       

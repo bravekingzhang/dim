@@ -75,6 +75,12 @@ class _MyAppState extends State<MyApp> {
               ),
               RaisedButton(
                 onPressed: () {
+                  logout();
+                },
+                child: Text('登出imsdk'),
+              ),
+              RaisedButton(
+                onPressed: () {
                   postData();
                 },
                 child: Text('测试发送数据'),
@@ -166,6 +172,15 @@ class _MyAppState extends State<MyApp> {
       print(result);
     } on PlatformException {
       print("登录  失败");
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      var result = await _dim.imLogout();
+      print(result);
+    } on PlatformException {
+      print("登出  失败");
     }
   }
 
