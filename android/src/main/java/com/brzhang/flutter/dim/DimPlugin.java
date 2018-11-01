@@ -99,7 +99,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMManager.getInstance().logout(new TIMCallBack() {
                 @Override
                 public void onError(int code, String s) {
-                    result.error("logout failed. code", code + "", s);
+                    result.error(code + "", s, s);
                 }
 
                 @Override
@@ -181,7 +181,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
                     Log.d(TAG, "login failed. code: " + code + " errmsg: " + desc);
-                    result.error("login failed. code", code + "", desc);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -199,7 +199,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
                     Log.d(TAG, "logout failed. code: " + code + " errmsg: " + desc);
-                    result.error("logout failed. code", code + "", desc);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -272,7 +272,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 含义请参见错误码表
                     Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
-                    result.error("send message failed. code: ", desc, code);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -304,7 +304,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
                     Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
-                    result.error("send message failed. code: ", desc, code);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -370,7 +370,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 public void onError(int code, String desc) {
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
-                    result.error(desc, String.valueOf(code), null);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -392,7 +392,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 public void onError(int code, String desc) {
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
-                    result.error(desc, String.valueOf(code), null);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override
@@ -409,7 +409,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 public void onError(int code, String desc) {
                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                     //错误码 code 列表请参见错误码表
-                    result.error(desc, String.valueOf(code), null);
+                    result.error(code + "", desc, desc);
                 }
 
                 @Override

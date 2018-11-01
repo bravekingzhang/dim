@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'dim'
-  s.version          = '0.1.11'
+  s.version          = '0.1.13'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
