@@ -192,7 +192,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<dynamic> getMessages() async {
     try {
-      var result = await _dim.getMessages("rq3", 1);
+      var result = await _dim.getMessages("rq3",);
       print(result);
     } on PlatformException {}
   }

@@ -222,6 +222,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             result.success("delConversation success");
         } else if (call.method.equals("getMessages")) {
             String identifier = call.argument("identifier");
+            int count = call.argument("count");
+            Log.e(TAG, "获取" + count + "条数据");
             int type = call.argument("ctype");
 //            TIMMessage lastMsg = call.argument("lastMsg");
             //获取会话扩展实例
@@ -229,7 +231,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMConversationExt conExt = new TIMConversationExt(con);
 
 //获取此会话的消息
-            conExt.getMessage(100, //获取此会话最近的 100 条消息
+            conExt.getMessage(count, //获取此会话最近的 100 条消息
                     null, //不指定从哪条消息开始获取 - 等同于从最新的消息开始往前
                     new TIMValueCallBack<List<TIMMessage>>() {//回调接口
                         @Override

@@ -87,10 +87,11 @@
       result(@"delConversation success");
   }else if([@"getMessages" isEqualToString:call.method]){
       NSString *identifier = call.arguments[@"identifier"];
+      int count = [call.arguments[@"count"] intValue];
       int ctype = [call.arguments[@"ctype"] intValue];
       //TIMMessage *lastMsg = call.arguments[@"lastMsg"];
       TIMConversation *con = [[TIMManager sharedInstance] getConversation: ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
-      [con getMessage:100 last:NULL succ:^(NSArray *msgs) {
+      [con getMessage:count last:NULL succ:^(NSArray *msgs) {
           if(msgs != nil && msgs.count > 0){
               NSArray *dictArray = [TIMConversation mj_keyValuesArrayWithObjectArray:msgs];
               NSError *writeError = nil;

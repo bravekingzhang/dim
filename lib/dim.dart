@@ -63,10 +63,15 @@ class Dim {
 
   ///获取一个会话的消息，暂不支持流式查询
   ///identifier 会话id
+  ///count 获取消息数量 ,默认50条
   ///ctype 1 私信，2群聊  ,默认是私信
-  Future<dynamic> getMessages(String identifier, [int ctype = 1]) async {
-    return await _methodChannel.invokeMethod('getMessages',
-        <String, dynamic>{'identifier': identifier, 'ctype': ctype});
+  Future<dynamic> getMessages(String identifier,
+      [int count = 50, int ctype = 1]) async {
+    return await _methodChannel.invokeMethod('getMessages', <String, dynamic>{
+      'identifier': identifier,
+      'count': count,
+      'ctype': ctype
+    });
   }
 
   ///发送文本消息
