@@ -87,10 +87,19 @@
       result(@"delConversation success");
   }else if([@"getMessages" isEqualToString:call.method]){
       NSString *identifier = call.arguments[@"identifier"];
-      TIMMessage *lastMsg = call.arguments[@"lastMsg"];
-      TIMConversation *con = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
-      [con getMessage:10 last:lastMsg succ:^(NSArray *msgs) {
-          result(msgs);
+      int ctype = [call.arguments[@"ctype"] intValue];
+      //TIMMessage *lastMsg = call.arguments[@"lastMsg"];
+      TIMConversation *con = [[TIMManager sharedInstance] getConversation: ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
+      [con getMessage:100 last:NULL succ:^(NSArray *msgs) {
+          if(msgs != nil && msgs.count > 0){
+              NSArray *dictArray = [TIMConversation mj_keyValuesArrayWithObjectArray:msgs];
+              NSError *writeError = nil;
+              NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictArray options:NSJSONWritingPrettyPrinted error:&writeError];
+              NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+              result(jsonString);
+          }else{
+              result(@"[]");
+          }
       } fail:^(int code, NSString *msg) {
           result([NSString stringWithFormat:@"get message failed. code: %d msg: %@", code, msg]);
       }];

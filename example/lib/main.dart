@@ -109,6 +109,12 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text('发送位置消息'),
               ),
+              RaisedButton(
+                onPressed: () {
+                  getMessages();
+                },
+                child: Text('拿到历史消息'),
+              ),
             ],
           ),
         ),
@@ -182,6 +188,13 @@ class _MyAppState extends State<MyApp> {
     } on PlatformException {
       print("登出  失败");
     }
+  }
+
+  Future<dynamic> getMessages() async {
+    try {
+      var result = await _dim.getMessages("rq3", 1);
+      print(result);
+    } on PlatformException {}
   }
 
   void canCelListener() {

@@ -13,102 +13,22 @@
 
 2、都准备ok了，就可以登录imsdk了。
 
-android 端配置你的项目中，android 目录app下面的 AndroidManifest.xml，内容参考这里
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.coinseast">
+登录代码参考这里：
 
-    <!-- The INTERNET permission is required for development. Specifically,
-         flutter needs it to communicate with the running application
-         to allow setting breakpoints, to provide hot reload, etc.
-    -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+```dart
+  Future<void> login() async {
+    try {
+//      var result = await _dim.imLogin(1400117017, "rq3",
+//          "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
+      var result = await _dim.imLogin(1400117017, "rq2",
+          "eJxlz01Pg0AQgOE7v4Ls2ejMwnaxSQ9Sq60W09o2QS*ElKGsHxS2SxGM-92ITSRxrs87mcynZds2W89X5-F2u69yE5mmIGYPbQbs7A*LQiVRbCJHJ-*QPgqlKYpTQ7pDFEJwgH6jEsqNStWp0CXv4SF5jboLv9suAKIElP1E7ToMJsvx7HpuKGhhJ1J3WU-Tl0E1fp6oMPPC9SNlOHiqFhftBmdhvLhSvi-L*yn4spG5vinfNGUplu2x8bmHCbmeaaugvn248zb1aNQ7adQ7nd5xgaO8dLyeHkkf1D7vAg4okDvwM8z6sr4BAlVcKw__");
+      print(result);
+    } on PlatformException {
+      print("登录  失败");
+    }
+  }
+```
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
-         calls FlutterMain.startInitialization(this); in its onCreate method.
-         In most cases you can leave this as-is, but you if you want to provide
-         additional functionality it is fine to subclass or reimplement
-         FlutterApplication and put your custom class here. -->
-    <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="coins_east"
-        android:icon="@mipmap/ic_launcher">
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- This keeps the window background of the activity showing
-                 until Flutter renders its first frame. It can be removed if
-                 there is no splash screen (such as the default splash screen
-                 defined in @style/LaunchTheme). -->
-            <meta-data
-                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
-                android:value="true" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
-        <!-- 【必须】消息收发service -->
-        <service
-            android:name="com.tencent.qalsdk.service.QalService"
-            android:exported="true"
-            android:process=":QALSERVICE" >
-        </service>
-        <service
-            android:name="com.tencent.qalsdk.service.QalAssistService"
-            android:exported="false"
-            android:process=":QALSERVICE" >
-        </service>
-
-        <!-- 【必须】 离线消息广播接收器 -->
-        <receiver
-            android:name="com.tencent.qalsdk.QALBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.tencent.qalsdk.broadcast.qal" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter" android:process=":QALSERVICE">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
-
-            <!-- ImSDK 3.0.2 后添加 -->
-            <intent-filter>
-                <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
-            </intent-filter>
-        </receiver>
-    </application>
-</manifest>
 
 ```
 ios端配置:

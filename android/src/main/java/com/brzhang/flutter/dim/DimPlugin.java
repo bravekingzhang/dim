@@ -170,9 +170,9 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                         }
                     });
             TIMManager.getInstance().setUserConfig(userConfig);
-
-//            TIMManager.getInstance().removeMessageListener(timMessageListener);
+            TIMManager.getInstance().removeMessageListener(timMessageListener);
             TIMManager.getInstance().addMessageListener(timMessageListener);
+
 
             // identifier为用户名，userSig 为用户登录凭证
             TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
@@ -222,14 +222,15 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             result.success("delConversation success");
         } else if (call.method.equals("getMessages")) {
             String identifier = call.argument("identifier");
-            TIMMessage lastMsg = call.argument("lastMsg");
+            int type = call.argument("ctype");
+//            TIMMessage lastMsg = call.argument("lastMsg");
             //获取会话扩展实例
-            TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, identifier);
+            TIMConversation con = TIMManager.getInstance().getConversation(type == 2 ? TIMConversationType.Group : TIMConversationType.C2C, identifier);
             TIMConversationExt conExt = new TIMConversationExt(con);
 
 //获取此会话的消息
-            conExt.getMessage(10, //获取此会话最近的 10 条消息
-                    lastMsg, //不指定从哪条消息开始获取 - 等同于从最新的消息开始往前
+            conExt.getMessage(100, //获取此会话最近的 100 条消息
+                    null, //不指定从哪条消息开始获取 - 等同于从最新的消息开始往前
                     new TIMValueCallBack<List<TIMMessage>>() {//回调接口
                         @Override
                         public void onError(int code, String desc) {//获取消息失败
@@ -241,9 +242,12 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                         @Override
                         public void onSuccess(List<TIMMessage> msgs) {//获取消息成功
                             //遍历取得的消息
-                            result.success(msgs);
                             if (msgs != null && msgs.size() > 0) {
-                                result.success(new Gson().toJson(msgs, new TypeToken<Collection<TIMMessage>>() {
+                                List<Message> messages = new ArrayList<>();
+                                for (TIMMessage timMessage : msgs) {
+                                    messages.add(new Message(timMessage));
+                                }
+                                result.success(new Gson().toJson(messages, new TypeToken<Collection<Message>>() {
                                 }.getType()));
                             } else {
                                 result.success("[]");

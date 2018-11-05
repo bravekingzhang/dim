@@ -1,6 +1,6 @@
 name: dim
 description: 集成了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能，目前Android，ios都ok
-version: 0.1.13
+version: 0.1.17
 author: brzhang <1595819400@qq.com>
 homepage: https://cloud.tencent.com/developer/user/1203298
 

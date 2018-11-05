@@ -44,6 +44,7 @@ class Dim {
       'userSig': sig,
     });
   }
+
   ///im登出
   Future<dynamic> imLogout() async {
     return await _methodChannel.invokeMethod("im_logout");
@@ -60,10 +61,12 @@ class Dim {
         'delConversation', <String, String>{'identifier': identifier});
   }
 
-  ///获取一个会话的消息，可以流式查询
-  Future<dynamic> getMessages(String identifier, dynamic lastMsg) async {
+  ///获取一个会话的消息，暂不支持流式查询
+  ///identifier 会话id
+  ///ctype 1 私信，2群聊  ,默认是私信
+  Future<dynamic> getMessages(String identifier, [int ctype = 1]) async {
     return await _methodChannel.invokeMethod('getMessages',
-        <String, dynamic>{'identifier': identifier, 'lastMsg': lastMsg});
+        <String, dynamic>{'identifier': identifier, 'ctype': ctype});
   }
 
   ///发送文本消息

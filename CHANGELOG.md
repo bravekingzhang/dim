@@ -1,3 +1,6 @@
+## 0.1.16
+简化dim的使用，android端不在需要在AndroidManifests.xml文件中配置service等内容，全部交给插件处理。
+
 ## 0.1.13
 
 * 归一化错误码
