@@ -1,3 +1,6 @@
+## 0.1.19
+获取用户个人资料
+
 ## 0.1.16
 简化dim的使用，android端不在需要在AndroidManifests.xml文件中配置service等内容，全部交给插件处理。
 

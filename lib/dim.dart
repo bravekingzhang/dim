@@ -131,6 +131,13 @@ class Dim {
         <String, dynamic>{'identifier': identifier, 'opTypeStr': opTypeStr});
   }
 
+  ///获取用户资料
+  ///param user is a list ["usersf1","jiofoea2"]
+  Future<dynamic> getUsersProfile(List<String> users) async {
+    return await _methodChannel
+        .invokeMethod("getUsersProfile", <String, dynamic>{'users': users});
+  }
+
   ///测试使用eventChannel推送数据过来
   Future<dynamic> postDataTest() async {
     return await _methodChannel.invokeMethod("post_data_test");

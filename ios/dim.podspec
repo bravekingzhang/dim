@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'dim'
-  s.version          = '0.1.18'
+  s.version          = '0.1.19'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -15,6 +15,7 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency 'YYModel'
   s.ios.deployment_target = '8.0'
   s.vendored_frameworks = [
     'ImSDK.framework',

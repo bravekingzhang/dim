@@ -11,6 +11,7 @@ import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMElem;
+import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMImageElem;
 import com.tencent.imsdk.TIMLocationElem;
@@ -450,6 +451,35 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     result.success(timFriendResult.getIdentifer());
                 }
             });
+        } else if (call.method.equals("getUsersProfile")) {
+            List<String> users = call.argument("users");
+            TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+                    Log.e(TAG, "getUsersProfile failed: " + code + " desc");
+                    result.error(desc, String.valueOf(code), null);
+                }
+
+                @Override
+                public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                    Log.e(TAG, "getUsersProfile succ");
+                    if (timUserProfiles != null && timUserProfiles.size() > 0) {
+                        List<User> userList = new ArrayList<>();
+                        for (TIMUserProfile res : timUserProfiles) {
+                            userList.add(new User(res));
+                            Log.e(TAG, "identifier: " + res.getIdentifier() + " nickName: " + res.getNickName()
+                                    + " remark: " + res.getRemark());
+                        }
+                        result.success(new Gson().toJson(userList, new TypeToken<Collection<User>>() {
+                        }.getType()));
+                    } else {
+                        result.success("[]");
+                    }
+
+                }
+            });
         } else {
             result.notImplemented();
         }
@@ -478,6 +508,28 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             timConversation = timMessage.getConversation();
             message = timMessage.getElement(0);
             timGroupMemberInfo = timMessage.getSenderGroupMemberProfile();
+        }
+    }
+
+    class User {
+        private String identifier = "";
+        private String nickName = "";
+        private String remark = "";
+        private String faceUrl = "";
+        private String selfSignature = "";
+        private long gender = 0L;
+        private long birthday = 0L;
+        private String location = "";
+
+        public User(TIMUserProfile timUserProfile) {
+            this.identifier = timUserProfile.getIdentifier();
+            this.nickName = timUserProfile.getNickName();
+            this.remark = timUserProfile.getRemark();
+            this.faceUrl = timUserProfile.getFaceUrl();
+            this.selfSignature = timUserProfile.getSelfSignature();
+            this.gender = timUserProfile.getGender() == null ? 1 : timUserProfile.getGender().getValue();
+            this.birthday = timUserProfile.getBirthday();
+            this.location = timUserProfile.getLocation();
         }
     }
 }

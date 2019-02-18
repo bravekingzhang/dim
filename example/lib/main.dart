@@ -115,6 +115,12 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text('拿到历史消息'),
               ),
+              RaisedButton(
+                onPressed: () {
+                  getUserInfo();
+                },
+                child: Text('获取个人资料'),
+              ),
             ],
           ),
         ),
@@ -192,7 +198,9 @@ class _MyAppState extends State<MyApp> {
 
   Future<dynamic> getMessages() async {
     try {
-      var result = await _dim.getMessages("rq3",);
+      var result = await _dim.getMessages(
+        "rq3",
+      );
       print(result);
     } on PlatformException {}
   }
@@ -200,6 +208,17 @@ class _MyAppState extends State<MyApp> {
   void canCelListener() {
     if (_messageStreamSubscription != null) {
       _messageStreamSubscription.cancel();
+    }
+  }
+
+  void getUserInfo() async {
+    try {
+      List<String> users = List();
+      users.add("jiumi_1");
+      var result = await _dim.getUsersProfile(users);
+      print(result);
+    } on PlatformException {
+      print("获取个人资料失败");
     }
   }
 }

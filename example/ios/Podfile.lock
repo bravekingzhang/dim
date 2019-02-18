@@ -1,11 +1,17 @@
 PODS:
-  - dim (0.1.4):
+  - dim (0.1.19):
     - Flutter
+    - YYModel
   - Flutter (1.0.0)
+  - YYModel (1.0.4)
 
 DEPENDENCIES:
   - dim (from `.symlinks/plugins/dim/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - YYModel
 
 EXTERNAL SOURCES:
   dim:
@@ -14,8 +20,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/flutter/ios"
 
 SPEC CHECKSUMS:
-  dim: d44ae765f83affdb502eef5434256018f57ad60d
+  dim: 83b64d87472f504d356d5dc4fcec353f75b12a58
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
 
