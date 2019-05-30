@@ -36,10 +36,16 @@ class Dim {
     return _listener;
   }
 
-  ///im登录
-  Future<dynamic> imLogin(int appid, String identifier, String sig) async {
-    return await _methodChannel.invokeMethod("im_login", <String, dynamic>{
+  ///im初始化
+  Future<dynamic> init(int appid) async {
+    return await _methodChannel.invokeMethod("init", <String, dynamic>{
       'sdkAppId': appid,
+    });
+  }
+
+  ///im登录
+  Future<dynamic> imLogin(String identifier, String sig) async {
+    return await _methodChannel.invokeMethod("im_login", <String, dynamic>{
       'identifier': identifier,
       'userSig': sig,
     });
@@ -136,6 +142,13 @@ class Dim {
   Future<dynamic> getUsersProfile(List<String> users) async {
     return await _methodChannel
         .invokeMethod("getUsersProfile", <String, dynamic>{'users': users});
+  }
+
+  ///设置个人资料
+  Future<dynamic> setUsersProfile(
+      int gender, String nick, String faceUrl) async {
+    return await _methodChannel.invokeMethod("setUsersProfile",
+        <String, dynamic>{'gender': gender, 'nick': nick, 'faceUrl': faceUrl});
   }
 
   ///测试使用eventChannel推送数据过来

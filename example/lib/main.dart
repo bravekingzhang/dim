@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:dim/dim.dart';
 
+import 'dart:math';
+
 void main() => runApp(new MyApp());
 
 class MyApp extends StatefulWidget {
@@ -13,7 +15,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Dim _dim = new Dim();
-  String _platformVersion = 'Unknown';
+
+  String _result = "";
+
+  List<dynamic> _users = List();
+
+  //在另外一个手机上测试改变下用户，靠这里了
+  int _currentUser = 1;
 
   StreamSubscription<dynamic> _messageStreamSubscription;
 
@@ -21,6 +29,16 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    _users.add({
+      'username': 'hoolly1',
+      'sig':
+          "eJxlj1FPgzAUhd-5FQ2vGtcWuqQmexhEZc4tmzIdeyFkLezqaBl0bI3xvxtRI4n39ftyzrnvDkLIjR*errLtVh*VSY2tpIuukYvdyz9YVSDSzKReLf5Bea6glmmWG1l3kDDGKMZ9B4RUBnL4MXZa7-eW9IRGvKVdy3eCjzEhnDPWV6Do4OxmGU7uBiDpLZslwIuNJJZaL9g1bRxP7TQ4PpILuw4H7KSjiIxhPFQw8cJypZLVRgRROU*4XCyLqo1eXvP1uV2Yw8E8a3M-P41GvUoDpfx9iVPs*8P*oFbWDWjVCRQTRqiHv851PpxPE3Nebw__"
+    });
+    _users.add({
+      'username': 'hoolly2',
+      'sig':
+          "eJxlj0FPgzAAhe-8CtKzMW2xCCYe2ILbHMuSOZTtQggtrFBa0tZNYvzvRtRI4rt*X97Le3dc1wX75Om6KEv1Km1uh54B984FEFz9wb7nNC9s7mn6D7K3nmuWF5VleoSIEIIhnDqcMml5xX*Mk1JCDHgiGNrm48p3ww2ECIUhIVOF1yPcxOl8FdeZzPQMZVuZKkYv-mYV1mhI0GFJL4wk6XoRNHTHvX0U8Thq2moX2M7MXrp187jcHj02XxTBQRxPQrYG3z5o4*Pzs6Dl-WTS8o79XgoxJNjzJ-TMtOFKjgKGiCDswa8A58P5BDK6Xkw_"
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -42,10 +60,6 @@ class _MyAppState extends State<MyApp> {
         print("我监听到数据了$onData");
       });
     }
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -64,62 +78,109 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: new Center(
-          child: new Column(
-            children: <Widget>[
-              new Text('Running on: $_platformVersion\n'),
-              RaisedButton(
-                onPressed: () {
-                  login();
-                },
-                child: Text('登录imsdk'),
+          child: CustomScrollView(
+            primary: false,
+            slivers: <Widget>[
+              SliverPersistentHeader(
+                delegate: _SliverAppBarDelegate(
+                    minHeight: 30,
+                    maxHeight: 200,
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: SingleChildScrollView(
+                        child: Text(_result.isEmpty ? "这里显示输出结果" : _result),
+                      ),
+                    )),
+                pinned: true,
               ),
-              RaisedButton(
-                onPressed: () {
-                  logout();
-                },
-                child: Text('登出imsdk'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  postData();
-                },
-                child: Text('测试发送数据'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  canCelListener();
-                },
-                child: Text('取消监听'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  sendTextMsg();
-                },
-                child: Text('发送文本消息'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  sendImageMsg();
-                },
-                child: Text('发送图片消息'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  sendLocationMsg();
-                },
-                child: Text('发送位置消息'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  getMessages();
-                },
-                child: Text('拿到历史消息'),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  getUserInfo();
-                },
-                child: Text('获取个人资料'),
+              SliverPadding(
+                padding: const EdgeInsets.all(10.0),
+                sliver: SliverGrid.count(
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  crossAxisCount: 4,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: () {
+                        init();
+                      },
+                      child: Text('初始化'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        login();
+                      },
+                      child: Text('登录'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        logout();
+                      },
+                      child: Text('登出'),
+                    ),
+//                    RaisedButton(
+//                      onPressed: () {
+//                        postData();
+//                      },
+//                      child: Text('测试发送数据'),
+//                    ),
+//                    RaisedButton(
+//                      onPressed: () {
+//                        canCelListener();
+//                      },
+//                      child: Text('取消监听'),
+//                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        sendTextMsg();
+                      },
+                      child: Text('发文本'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        sendImageMsg();
+                      },
+                      child: Text('发图片'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        sendLocationMsg();
+                      },
+                      child: Text('发位置'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        getMessages();
+                      },
+                      padding: EdgeInsets.all(0),
+                      child: Text('历史消息'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        getUserInfo();
+                      },
+                      child: Text('拿资料'),
+                    ),
+                    RaisedButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        setUserInfo();
+                      },
+                      child: Text('设置资料'),
+                    ),
+                    RaisedButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        getConversations();
+                      },
+                      child: Text('会话列表'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -131,57 +192,85 @@ class _MyAppState extends State<MyApp> {
   Future<void> postData() async {
     try {
       var result = await _dim.postDataTest();
+      setState(() {
+        this._result = result;
+      });
       print(result);
     } on PlatformException {
       print("listen  失败");
     }
   }
 
-//  Future<void> login() async {
-//    try {
-//      var result = await _dim.imLogin(1400119955, "18681446372", "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
-////      var result = await _dim.postDataTest();
-//      print(result);
-//    } on PlatformException {
-//      print("登录  失败");
-//    }
-//  }
-
   Future<void> sendTextMsg() async {
     try {
-      var result = await _dim.sendTextMessages("rq2", "haahah");
+      var result = await _dim.sendTextMessages(
+          _users[1 - _currentUser]['username'], "haahah");
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("发送消息失败");
+      setState(() {
+        this._result = "发送消息失败";
+      });
     }
   }
 
   Future<void> sendImageMsg() async {
     try {
-      var result = await _dim.sendImageMessages("rq2", "tyyhuiijkoi.png");
+      var result = await _dim.sendImageMessages(
+          _users[1 - _currentUser]['username'], "tyyhuiijkoi.png");
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("发送图片消息失败");
+      setState(() {
+        this._result = "发送图片消息失败";
+      });
     }
   }
 
   Future<void> sendLocationMsg() async {
     try {
-      var result =
-          await _dim.sendLocationMessages("rq2", 113.93, 22.54, "腾讯大厦");
+      var result = await _dim.sendLocationMessages(
+          _users[1 - _currentUser]['username'], 113.93, 22.54, "腾讯大厦");
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("发送位置消息失败");
+      setState(() {
+        this._result = "发送位置消息失败";
+      });
     }
   }
 
+  ///测试化测试，这里传自己应用的appid
+  Future<void> init() async {
+    try {
+      var result = await _dim.init(1400119955);
+      print(result);
+      setState(() {
+        this._result = result;
+      });
+    } on PlatformException {
+      print("初始化失败");
+    }
+  }
+
+  ///第一个测试账号
   Future<void> login() async {
     try {
-//      var result = await _dim.imLogin(1400117017, "rq3",
-//          "eJxlz11PwjAUgOH7-YpmtxjTj32AdwuCMIcGJkq9WWbXlkbsSul0avjvhkniEs-t856cnG8PAOA-ZPllyVjdaFe4T8N9cAV86F-8oTGqKkpXEFv9Q94aZXlRCsdthygMQwxhv1EV104JdS7snvTwUL0W3YXf7QBChGKI4n6iZIeLCR3Pl9dGrMUwj1iyqvSNXNMmmyU5HQ6mVjwumjs5truYbkcbTeR8m6RCRLssu0*pfVrepvmgbdhzFr1MP7gLZ-ir3qxkPGlZsB-1Tjr1xs-vBBBHJA5wT9*5PahadwGGKESYwNP43tH7ARZeXFI_");
-      var result = await _dim.imLogin(1400117017, "rq2",
-          "eJxlz01Pg0AQgOE7v4Ls2ejMwnaxSQ9Sq60W09o2QS*ElKGsHxS2SxGM-92ITSRxrs87mcynZds2W89X5-F2u69yE5mmIGYPbQbs7A*LQiVRbCJHJ-*QPgqlKYpTQ7pDFEJwgH6jEsqNStWp0CXv4SF5jboLv9suAKIElP1E7ToMJsvx7HpuKGhhJ1J3WU-Tl0E1fp6oMPPC9SNlOHiqFhftBmdhvLhSvi-L*yn4spG5vinfNGUplu2x8bmHCbmeaaugvn248zb1aNQ7adQ7nd5xgaO8dLyeHkkf1D7vAg4okDvwM8z6sr4BAlVcKw__");
+      var result = await _dim.imLogin(
+          _users[_currentUser]['username'], _users[_currentUser]['sig']);
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("登录  失败");
     }
@@ -191,6 +280,9 @@ class _MyAppState extends State<MyApp> {
     try {
       var result = await _dim.imLogout();
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("登出  失败");
     }
@@ -199,9 +291,12 @@ class _MyAppState extends State<MyApp> {
   Future<dynamic> getMessages() async {
     try {
       var result = await _dim.getMessages(
-        "rq3",
+        _users[1 - _currentUser]['username'],
       );
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {}
   }
 
@@ -214,11 +309,69 @@ class _MyAppState extends State<MyApp> {
   void getUserInfo() async {
     try {
       List<String> users = List();
-      users.add("jiumi_1");
+      users.add(_users[1 - _currentUser]['username']);
       var result = await _dim.getUsersProfile(users);
       print(result);
+      setState(() {
+        this._result = result;
+      });
     } on PlatformException {
       print("获取个人资料失败");
     }
+  }
+
+  void setUserInfo() async {
+    try {
+      var result = await _dim.setUsersProfile(
+          1, "hz", "https://www.brzhang.club/images/hz.png");
+      print(result);
+      setState(() {
+        this._result = result;
+      });
+    } on PlatformException {
+      print("获取个人资料失败");
+    }
+  }
+  void getConversations() async {
+    try {
+      var result = await _dim.getConversations();
+      print(result);
+      setState(() {
+        this._result = result;
+      });
+    } on PlatformException {
+      print("获取会话列表失败");
+    }
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return new SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
