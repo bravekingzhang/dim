@@ -1,6 +1,5 @@
 #import "DimPlugin.h"
-#import <IMMessageExt/IMMessageExt.h>
-#import <IMFriendshipExt/IMFriendshipExt.h>
+#import <ImSDK/ImSDK.h>
 #import <YYModel.h>
 #import "DimModel.h"
 
@@ -25,23 +24,11 @@
     
     if ([@"getPlatformVersion" isEqualToString:call.method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }else if ([ @"im_logout" isEqualToString:call.method] ){
-        [[TIMManager sharedInstance] logout:^{
-            result(@"Logout Succ");
-        } fail:^(int code, NSString *msg) {
-            result([NSString stringWithFormat:@"Login Failed: %d->%@", code, msg]);
-        }];
-    }else if([@"im_login" isEqualToString:call.method]) {
-        NSInteger appidInt = [call.arguments[@"sdkAppId"] integerValue];
-        NSString *appid = [NSString stringWithFormat:@"%ld", appidInt];
-        NSString *identifier = (NSString *)(call.arguments[@"identifier"]);
-        NSString *userSig = (NSString *)(call.arguments[@"userSig"]);
-        
+    }else if([ @"init" isEqualToString:call.method] ){
+        NSInteger appidInt = (NSInteger)call.arguments[@"appid"];
         //初始化 SDK 基本配置
         TIMSdkConfig *config = [TIMSdkConfig new];
-        config.sdkAppId = [appid intValue];
-        config.accountType = @"792";
-        config.disableCrashReport = YES;
+        config.sdkAppId = appidInt;
         config.connListener = self;
         
         //初始化 SDK
@@ -53,7 +40,17 @@
         [[TIMManager sharedInstance] setUserConfig:userConfig];
         [[TIMManager sharedInstance] removeMessageListener:self];
         [[TIMManager sharedInstance] addMessageListener:self];
-        
+    } else if ([ @"im_logout" isEqualToString:call.method] ){
+        [[TIMManager sharedInstance] logout:^{
+            result(@"Logout Succ");
+        } fail:^(int code, NSString *msg) {
+            result([NSString stringWithFormat:@"Login Failed: %d->%@", code, msg]);
+        }];
+    }else if([@"im_login" isEqualToString:call.method]) {
+    
+        NSString *appid = (NSString *)(call.arguments[@"appid"]);
+        NSString *identifier = (NSString *)(call.arguments[@"identifier"]);
+        NSString *userSig = (NSString *)(call.arguments[@"userSig"]);
         
         TIMLoginParam *login_param = [[TIMLoginParam alloc ]init];
         // identifier 为用户名，userSig 为用户登录凭证
@@ -184,96 +181,99 @@
         
     }else if([@"addFriend" isEqualToString:call.method]){
         
-        NSMutableArray *users = [[NSMutableArray alloc] init];
-        TIMAddFriendRequest *req = [[TIMAddFriendRequest alloc] init];
-        req.identifier = call.arguments[@"identifier"];
-        req.addWording = [NSString stringWithUTF8String:"请添加我"];
-        [users addObject:req];
-        [[TIMFriendshipManager sharedInstance] addFriend:users succ:^(NSArray *friends) {
-            for(TIMFriendResult *res in friends){
-                if(res.status != TIM_FRIEND_STATUS_SUCC){
-                    result([NSString stringWithFormat:@"AddFriend succ: user=%@ status=%ld", res.identifier, (long)res.status]);
-                }else{
-                    result(res.identifier);
-                }
-            }
+        TIMFriendRequest *req = [[TIMFriendRequest alloc] init];
+        req.identifier = (NSString *)call.arguments[@"identifier"];
+        req.addWording =@"请添加我";
+        req.addSource = @"AddSource_Type_iOS";
+        [[TIMFriendshipManager sharedInstance] addFriend:req succ:^(TIMFriendResult *addResult) {
+            if (addResult.result_code == 0)
+                result(@"添加成功");
+            else
+                result([NSString stringWithFormat:@"异常：%ld, %@", (long)addResult.result_code, addResult.result_info]);
         } fail:^(int code, NSString *msg) {
-            result([NSString stringWithFormat:@"msg:%@ code:%d", msg, code]);
+             result([NSString stringWithFormat:@"失败：%d, %@", code, msg]);
         }];
         
     }else if([@"delFriend" isEqualToString:call.method]){
         
-        NSMutableArray *delUsers = [[NSMutableArray alloc] init];
-        [delUsers addObject:call.arguments[@"identifier"]];
+        
+        NSMutableArray * del_users = [[NSMutableArray alloc] init];
+        // 删除好友 iOS_002
+        [del_users addObject:@"iOS_002"];
         // TIM_FRIEND_DEL_BOTH 指定删除双向好友
-        [[TIMFriendshipManager sharedInstance] delFriend: TIM_FRIEND_DEL_BOTH users:delUsers succ:^(NSArray* arr) {
-            for (TIMFriendResult * res in arr) {
-                if (res.status != TIM_FRIEND_STATUS_SUCC) {
-                    result([NSString stringWithFormat:@"DelFriend failed: user=%@ status=%ld", res.identifier, (long)res.status]);
+        [[TIMFriendshipManager sharedInstance] deleteFriends:del_users delType:TIM_FRIEND_DEL_BOTH succ:^(NSArray<TIMFriendResult *> *results) {
+            for (TIMFriendResult * res in results) {
+                if (res.result_code != TIM_FRIEND_STATUS_SUCC) {
+                   result([NSString stringWithFormat:@"deleteFriends failed: user=%@ status=%ld", res.identifier, (long)res.result_code]);
                 }
                 else {
-                    result(res.identifier);
+                    result([NSString stringWithFormat:@"deleteFriends succ: user=%@ status=%ld", res.identifier, (long)res.result_code]);
                 }
             }
         } fail:^(int code, NSString * err) {
-            result([NSString stringWithFormat:@"DelFriend failed: code=%d err=%@", code, err]);
+            result([NSString stringWithFormat:@"deleteFriends failed: code=%d err=%@", code, err]);
         }];
         
     }else if([@"listFriends" isEqualToString:call.method]){
         
         [[TIMFriendshipManager sharedInstance] getFriendList:^(NSArray * arr) {
-            NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-            for (TIMUserProfile *timUser in arr) {
-                DimUser *dimUser = [DimUser initWithTimUser:timUser];
-                [dictArray addObject:dimUser];
-            }
-            NSString *jsonString = [dictArray yy_modelToJSONString];
+            NSString *jsonString = [arr yy_modelToJSONString];
             result(jsonString);
-            
         }fail:^(int code, NSString * err) {
-            NSLog(@"GetFriendList fail: code=%d err=%@", code, err);;
+            result([NSString stringWithFormat:@"GetFriendList fail: code=%d err=%@", code, err]);
         }];
         
     }else if([@"opFriend" isEqualToString:call.method]){
         
-        NSMutableArray *arr = [[NSMutableArray alloc] init];
         NSString *identifier = call.arguments[@"identifier"];
         NSString *opTypeStr = call.arguments[@"opTypeStr"];
         TIMFriendResponse *response = [[TIMFriendResponse alloc] init];
         response.identifier = identifier;
         if([opTypeStr isEqualToString:@"Y"]){
-            response.responseType = TIM_FRIEND_RESPONSE_AGREE;
+            response.responseType = TIM_FRIEND_RESPONSE_AGREE_AND_ADD;
         }else{
             response.responseType = TIM_FRIEND_RESPONSE_REJECT;
         }
-        [arr addObject:response];
-        
-        [[TIMFriendshipManager sharedInstance] addFriend:arr succ:^(NSArray *friends) {
-            for (TIMFriendResult * res in friends) {
-                result(res.identifier);
+        [[TIMFriendshipManager sharedInstance] doResponse:response succ:^(TIMFriendResult *res) {
+            if (res.result_code != TIM_FRIEND_STATUS_SUCC) {
+                result([NSString stringWithFormat:@"deleteFriends failed: user=%@ status=%ld", res.identifier, (long)res.result_code]);
             }
-        } fail:^(int code, NSString *msg) {
-            result([NSString stringWithFormat:@"msg:%@ code:%d", msg, code]);
+            else {
+                result([NSString stringWithFormat:@"deleteFriends succ: user=%@ status=%ld", res.identifier, (long)res.result_code]);
+            }
+        } fail:^(int code, NSString *err) {
+           result([NSString stringWithFormat:@"opFriend fail: code=%d err=%@", code, err]);
         }];
+        
     }
     else if([@"getUsersProfile" isEqualToString:call.method]){
         
         NSArray *arr1 = call.arguments[@"users"];
         
-        [[TIMFriendshipManager sharedInstance] getUsersProfile:arr1 succ:^(NSArray * arr) {
+    
+        [[TIMFriendshipManager sharedInstance] getUsersProfile:arr1 forceUpdate:YES succ:^(NSArray * arr) {
+//            for (TIMUserProfile * profile in arr) {
+//                NSLog(@"user=%@", profile);
+//            }
             if (arr !=NULL && arr.count >0) {
-                NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-                for (TIMUserProfile *timUser in arr) {
-                    DimUser *dimUser = [DimUser initWithTimUser:timUser];
-                    [dictArray addObject:dimUser];
-                }
-                NSString *jsonString = [dictArray yy_modelToJSONString];
+                NSString *jsonString = [arr yy_modelToJSONString];
                 result(jsonString);
             }else{
                 result(@"[]");
             }
         }fail:^(int code, NSString * err) {
-            NSLog(@"GetFriendsProfile fail: code=%d err=%@", code, err);
+
+            result([NSString stringWithFormat:@"getUsersProfile fail: code=%d err=%@", code, err]);
+        }];
+    }
+    else if([@"setUsersProfile" isEqualToString:call.method]){
+        NSString *nick = call.arguments[@"nick"];
+        NSInteger gender = (NSInteger)call.arguments[@"gender"];
+        NSString *faceUrl = call.arguments[@"faceUrl"];
+        [[TIMFriendshipManager sharedInstance]modifySelfProfile:@{TIMProfileTypeKey_Nick:nick,TIMProfileTypeKey_FaceUrl:faceUrl,TIMProfileTypeKey_Gender:[NSNumber numberWithInt:gender==1?TIM_GENDER_MALE:TIM_GENDER_FEMALE]} succ:^{
+            result(@"setUsersProfile succ");
+        } fail:^(int code, NSString *err) {
+            result([NSString stringWithFormat:@"GetFriendList fail: code=%d err=%@", code, err]);
         }];
     }
     else {

@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: const Text('Plugin example app'),
+          title: Text('当前登录账号' + _users[_currentUser]["username"]),
         ),
         body: new Center(
           child: CustomScrollView(
@@ -265,7 +265,7 @@ class _MyAppState extends State<MyApp> {
   ///第一个测试账号
   Future<void> login() async {
     try {
-      var result = await _dim.imLogin(
+      var result = await _dim.imLogin("1400119955",
           _users[_currentUser]['username'], _users[_currentUser]['sig']);
       print(result);
       setState(() {
@@ -332,6 +332,7 @@ class _MyAppState extends State<MyApp> {
       print("获取个人资料失败");
     }
   }
+
   void getConversations() async {
     try {
       var result = await _dim.getConversations();

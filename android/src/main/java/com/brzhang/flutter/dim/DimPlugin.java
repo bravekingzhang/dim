@@ -179,7 +179,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
 
                 result.success("init succ");
             } else {
-                result.success("init failed");
+                result.success("init failed ,not in main process");
             }
         } else if (call.method.equals("im_login")) {
             if (!TextUtils.isEmpty(TIMManager.getInstance().getLoginUser())) {
@@ -192,7 +192,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
                 @Override
                 public void onError(int code, String desc) {
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -203,8 +203,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         } else if (call.method.equals("im_logout")) {
             TIMManager.getInstance().logout(new TIMCallBack() {
                 @Override
-                public void onError(int code, String s) {
-                    result.error(code + "", s, s);
+                public void onError(int code, String desc) {
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -217,10 +217,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMManager.getInstance().logout(new TIMCallBack() {
                 @Override
                 public void onError(int code, String desc) {
-                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                    //错误码 code 列表请参见错误码表
                     Log.d(TAG, "logout failed. code: " + code + " errmsg: " + desc);
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -257,9 +255,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     new TIMValueCallBack<List<TIMMessage>>() {//回调接口
                         @Override
                         public void onError(int code, String desc) {//获取消息失败
-                            //接口返回了错误码 code 和错误描述 desc，可用于定位请求失败原因
-                            //错误码 code 含义请参见错误码表
                             Log.d(TAG, "get message failed. code: " + code + " errmsg: " + desc);
+                            result.error(desc, String.valueOf(code), null);
                         }
 
                         @Override
@@ -296,10 +293,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
                 public void onError(int code, String desc) {//发送消息失败
-                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                    //错误码 code 含义请参见错误码表
                     Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -328,10 +323,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
                 public void onError(int code, String desc) {//发送消息失败
-                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                    //错误码 code 列表请参见错误码表
                     Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -362,10 +355,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
                 public void onError(int code, String desc) {//发送消息失败
-                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                    //错误码 code 列表请参见错误码表
                     Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -400,9 +391,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
                 public void onError(int code, String desc) {//发送消息失败
-                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                    //错误码 code 含义请参见错误码表
-                    Log.d(TAG, "send message failed. code: " + code + " errmsg: " + desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -424,9 +413,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             timFriendRequest.setAddSource("android");
             TIMFriendshipManager.getInstance().addFriend(timFriendRequest, new TIMValueCallBack<TIMFriendResult>() {
                 @Override
-                public void onError(int i, String s) {
-                    QLog.e(TAG, "addFriend err code = " + i + ", desc = " + s);
-                    result.error(i + "", s, s);
+                public void onError(int code, String desc) {
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -439,11 +427,11 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             String identifier = call.argument("identifier");
 
             List<String> identifiers = new ArrayList<>();
-            identifiers.add("test_id");
+            identifiers.add(identifier);
             TIMFriendshipManager.getInstance().deleteFriends(identifiers, TIMDelFriendType.TIM_FRIEND_DEL_BOTH, new TIMValueCallBack<List<TIMFriendResult>>() {
                 @Override
                 public void onError(int code, String desc) {
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -455,7 +443,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             TIMFriendshipManager.getInstance().getFriendList(new TIMValueCallBack<List<TIMFriend>>() {
                 @Override
                 public void onError(int code, String desc) {
-                    result.error(code + "", desc, desc);
+                    result.error(desc, String.valueOf(code), null);
                 }
 
                 @Override
@@ -521,7 +509,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             String faceUrl = call.argument("faceUrl");
             HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_NICK, nick);
-            profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, TIMFriendGenderType.GENDER_MALE);
+            profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, gender==1?TIMFriendGenderType.GENDER_MALE:TIMFriendGenderType.GENDER_FEMALE);
             profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_FACEURL, faceUrl);
             TIMFriendshipManager.getInstance().modifySelfProfile(profileMap, new TIMCallBack() {
                 @Override

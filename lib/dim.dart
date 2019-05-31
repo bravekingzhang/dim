@@ -39,13 +39,15 @@ class Dim {
   ///im初始化
   Future<dynamic> init(int appid) async {
     return await _methodChannel.invokeMethod("init", <String, dynamic>{
-      'sdkAppId': appid,
+      'appid': appid,
     });
   }
 
   ///im登录
-  Future<dynamic> imLogin(String identifier, String sig) async {
+  ///appid 参数ios登录是需要的，android可以随便传
+  Future<dynamic> imLogin(String appid,String identifier, String sig) async {
     return await _methodChannel.invokeMethod("im_login", <String, dynamic>{
+      'appid':appid,
       'identifier': identifier,
       'userSig': sig,
     });

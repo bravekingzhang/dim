@@ -16,16 +16,10 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'YYModel'
+  s.dependency 'TXIMSDK_iOS'
   s.ios.deployment_target = '8.0'
   s.vendored_frameworks = [
-    'ImSDK.framework',
-    'QALSDK.framework',
-    'TLSSDK.framework',
-    'IMFriendshipExt.framework',
-    'IMGroupExt.framework',
-    'IMMessageExt.framework',
-    'IMSDKBugly.framework',
-    'QALHttpSDK.framework'
+
   ]
 end
 
