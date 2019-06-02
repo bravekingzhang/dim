@@ -1,8 +1,8 @@
 name: dim
-description: 集成了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能，目前Android，ios都ok，使用起来是相当方便，只要继承，后台实现一个sig，前端拿到这个sig登录即可，所有的集成过程都封装在了插件中。
-version: 0.1.20
+description: 集成了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能。
+version: 0.1.21
 author: brzhang <1595819400@qq.com>
-homepage: https://cloud.tencent.com/developer/user/1203298
+homepage: https://gitee.com/gameOverFlow/dim
 
 dependencies:
   flutter:

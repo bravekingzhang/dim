@@ -32,17 +32,17 @@ class _MyAppState extends State<MyApp> {
     _users.add({
       'username': 'hoolly1',
       'sig':
-          "eJxlj1FPgzAUhd-5FQ2vGtcWuqQmexhEZc4tmzIdeyFkLezqaBl0bI3xvxtRI4n39ftyzrnvDkLIjR*errLtVh*VSY2tpIuukYvdyz9YVSDSzKReLf5Bea6glmmWG1l3kDDGKMZ9B4RUBnL4MXZa7-eW9IRGvKVdy3eCjzEhnDPWV6Do4OxmGU7uBiDpLZslwIuNJJZaL9g1bRxP7TQ4PpILuw4H7KSjiIxhPFQw8cJypZLVRgRROU*4XCyLqo1eXvP1uV2Yw8E8a3M-P41GvUoDpfx9iVPs*8P*oFbWDWjVCRQTRqiHv851PpxPE3Nebw__"
+          "eJxlj8FPgzAche-8FYTrjLbQgngbbkEmHIgzZF4Iwg*obLTSssmM-7sRNTbxXb8v7*W9G6ZpWtv44bIoSz72KleTAMu8MS1kXfxBIViVFyp3huofhDfBBsiLWsEwQ0wptRHSHVZBr1jNfoyW8-1*wpogqy6fV74bCEI2pi51dYU1M0zWu9soXWUp37Q0CKYoCGJVPi3ASRkbty*CyCQeC7dZc1igFK5OUbvchMdyyvz7tqulF3qrJT3Is-vYvI4nz92hwc-EHQnpM0k6bVKxA-xe8sk19oij0SMMkvF*FmyEKbYd9BXL*DA*AfzTXb0_"
     });
     _users.add({
       'username': 'hoolly2',
       'sig':
-          "eJxlj11PgzAYhe-5FQ23GtMWitZkFzCQzYGZusTJTUPasnUOykfdmMb-bkSNJL63z5NzzvtuAQDsVfJ4kXOuXyvDzKmWNrgGNrTP-2BdK8Fyw5xW-IOyr1UrWV4Y2Q4QEUIwhGNHCVkZVagfY6v1fn-CI6ETL2xo*U5wIUSIUkLGitoMMI3up-P4bOZO8RsPFygLbsO7WfSwXdGle7PBMt5ldHn5VBwbo9dR76vA78or2bWxk2Yl75pFenimye4Y9aEIcl5yNU*0J5q1Q-zJZFRpVCl-X6KORz1vPOgg207pahAwRARhB36dbX1Yn7rbXZY_"
+          "eJxlj8FOg0AURfd8BWFbIzMDM60mLhqUhNpqacUFGwKdgb4yDATGltb470bUSOLbnpN773s3TNO0Xpbb63S3q9*UTvS5EZZ5a1rIuvqDTQM8SXXitPwfFH0DrUjSXIt2gJhSShAaO8CF0pDDj7GvaynPZCR0vEyGlu8EFyGCKaNsrEAxwNVD5AXhPeHk4D1uTq7wudL9pVB9PJmjCmTZ*pn0Q8*3N9sc8qciKBbsGOBYnEo2E5nM9yxmr5FcVwd7MWEdrHHozLPnVbS0w7tRpYZK-L50487wdDrefBRtB7UaBIIwxcRBX2cZH8YnH3NdyQ__"
     });
     _users.add({
       'username': 'hoolly3',
       'sig':
-          "eJxlj1FPgzAYRd-5FYRXjGvpvjlMfGAbLosSBooaXxpcy6gr0LHCZMb-bkSNJN7Xc3Jv7rthmqZ1f3t3nm42VVNqqjvFLfPStJB19geVEoymmpKa-YP8TYma0zTTvO4hBgAHoaEjGC*1yMSPkVeVlB0ZCAe2o-3Kd8MYIYxdF2CoiG0PAz*Zr2Z7NurU1o*uJ91zvCinKOQPWZKx0zJ4sgsgEq8Xjz6MGuIJ38tfY97uZ7EXtNOV29hh-qLmqQwTb3dTQnGKeL4kMlpr*3g1mNSi4L*X3PEFAZgMaMvrg6jKXnAQBuwQ9BXL*DA*AesgXbg_"
+          "eJxlj11PgzAARd-5FU2fjbZA2ccbwW0QYbqMEeSlAdpB2YQGyiYx-ncjakbifT0n9*Z*aAAAGPr7*zTPm75WVA2SQ7AEEMG7G5RSMJoqarTsH*TvUrScpkfF2xFiQoiO0NQRjNdKHMWvUTbN*TwYE6FjJzqu-DSYCOmYWMSaKqIYYbB6dbyd40XeY6i8uHpyS5*blzBKtv1zvtrGa9Zd1yeLWb0hrzxyba*0g83eVpsgr5wC6Vl8KHYvWZUmTvdQJ2o4ZHXH0eD77tywJ5NKvPG-SwtzjmeL2YReeNuJph4FHWGCdQN9B2qf2hc3HF5a"
     });
   }
 
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: Text('当前登录账号' + _users[_currentUser]["username"]),
+          title: Text('当前账号' + _users[_currentUser]["username"]),
         ),
         body: new Center(
           child: CustomScrollView(
@@ -209,7 +209,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendTextMsg() async {
     try {
       var result = await _dim.sendTextMessages(
-          _users[1 - _currentUser]['username'], "haahah");
+          _users[_users.length - _currentUser-1]['username'], "haahah");
       print(result);
       setState(() {
         this._result = result;
@@ -225,7 +225,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendImageMsg() async {
     try {
       var result = await _dim.sendImageMessages(
-          _users[1 - _currentUser]['username'], "tyyhuiijkoi.png");
+          _users[_users.length - _currentUser-1]['username'], "tyyhuiijkoi.png");
       print(result);
       setState(() {
         this._result = result;
@@ -241,7 +241,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendLocationMsg() async {
     try {
       var result = await _dim.sendLocationMessages(
-          _users[1 - _currentUser]['username'], 113.93, 22.54, "腾讯大厦");
+          _users[_users.length - _currentUser-1]['username'], 113.93, 22.54, "腾讯大厦");
       print(result);
       setState(() {
         this._result = result;
@@ -257,7 +257,7 @@ class _MyAppState extends State<MyApp> {
   ///测试化测试，这里传自己应用的appid
   Future<void> init() async {
     try {
-      var result = await _dim.init(1400119955);
+      var result = await _dim.init(1400215656);
       print(result);
       setState(() {
         this._result = result;
@@ -295,7 +295,7 @@ class _MyAppState extends State<MyApp> {
   Future<dynamic> getMessages() async {
     try {
       var result = await _dim.getMessages(
-        _users[1 - _currentUser]['username'],
+        _users[_users.length - _currentUser-1]['username'],
       );
       print(result);
       setState(() {
@@ -313,7 +313,7 @@ class _MyAppState extends State<MyApp> {
   void getUserInfo() async {
     try {
       List<String> users = List();
-      users.add(_users[1 - _currentUser]['username']);
+      users.add(_users[_users.length - _currentUser-1]['username']);
       var result = await _dim.getUsersProfile(users);
       print(result);
       setState(() {
