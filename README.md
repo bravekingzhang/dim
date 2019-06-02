@@ -35,7 +35,7 @@ dependencies:
 
 ### IOS端注意什么
 
-1、请注意在你的flutter工程的ios项目更目录执行`pod update`[**非必须，如果报错建议执行一次**]
+1、请注意在你的flutter工程的ios项目根目录执行`pod update`[**非必须，如果报错建议执行一次**]
 
 2、随后在执行一次`pod install`
 
