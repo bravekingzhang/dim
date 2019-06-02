@@ -100,7 +100,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         if (call.method.equals("getPlatformVersion")) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         } else if (call.method.equals("init")) {
-            int appid = call.argument("sdkAppId");
+            int appid = call.argument("appid");
             //初始化 IM SDK 基本配置
             //判断是否是在主线程
             if (SessionWrapper.isMainProcess(registrar.context())) {

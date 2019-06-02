@@ -48,4 +48,4 @@ flutter:
   # For details regarding fonts in packages, see
   # https://flutter.io/custom-fonts/#from-packages
 environment:
-    sdk: ">=1.19.0 < 2.3.0"
+  sdk: ">=2.1.0 <3.0.0"

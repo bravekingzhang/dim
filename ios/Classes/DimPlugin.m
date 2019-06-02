@@ -1,7 +1,7 @@
 #import "DimPlugin.h"
 #import <ImSDK/ImSDK.h>
 #import <YYModel.h>
-#import "DimModel.h"
+//#import "DimModel.h"
 
 @interface DimPlugin() <TIMConnListener, TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
 @property (nonatomic, strong) FlutterEventSink eventSink;
@@ -27,19 +27,23 @@
     }else if([ @"init" isEqualToString:call.method] ){
         NSInteger appidInt = (NSInteger)call.arguments[@"appid"];
         //初始化 SDK 基本配置
-        TIMSdkConfig *config = [TIMSdkConfig new];
-        config.sdkAppId = appidInt;
+        TIMSdkConfig *config = [[TIMSdkConfig alloc] init];
+        config.sdkAppId = (int)appidInt;
         config.connListener = self;
+        config.logLevel = TIM_LOG_DEBUG;
+        
         
         //初始化 SDK
-        [[TIMManager sharedInstance] initSdk:config];
+        int code = [[TIMManager sharedInstance] initSdk:config];
+        NSLog(@"initSdk:result is %d", code);
         //将用户配置与通讯管理器进行绑定
-        TIMUserConfig *userConfig = [TIMUserConfig new];
+        TIMUserConfig *userConfig = [[TIMUserConfig alloc] init];
         userConfig.userStatusListener = self;
         userConfig.refreshListener = self;
         [[TIMManager sharedInstance] setUserConfig:userConfig];
         [[TIMManager sharedInstance] removeMessageListener:self];
         [[TIMManager sharedInstance] addMessageListener:self];
+         result(@"init Succ");
     } else if ([ @"im_logout" isEqualToString:call.method] ){
         [[TIMManager sharedInstance] logout:^{
             result(@"Logout Succ");
@@ -49,23 +53,20 @@
     }else if([@"im_login" isEqualToString:call.method]) {
     
         NSString *appid = (NSString *)(call.arguments[@"appid"]);
-        NSString *identifier = (NSString *)(call.arguments[@"identifier"]);
-        NSString *userSig = (NSString *)(call.arguments[@"userSig"]);
-        
+        NSString *identifier = call.arguments[@"identifier"];
+        NSString *userSig = call.arguments[@"userSig"];
+        NSLog(@"identifier-->userSig:%@-->%@", identifier,userSig);
         TIMLoginParam *login_param = [[TIMLoginParam alloc ]init];
-        // identifier 为用户名，userSig 为用户登录凭证
-        // appidAt3rd 在私有帐号情况下，填写与 sdkAppId 一样
+   
         login_param.identifier = identifier;
         login_param.userSig = userSig;
-        login_param.appidAt3rd = appid;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[TIMManager sharedInstance] login: login_param succ:^(){
-                result(@"Login Succ");
-            } fail:^(int code, NSString * err) {
-                NSLog(@"Login Failed: %d->%@", code, err);
-                result([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
-            }];
-        });
+
+        [[TIMManager sharedInstance] login: login_param succ:^(){
+            result(@"Login Succ");
+        } fail:^(int code, NSString * err) {
+            NSLog(@"Login Failed: %d->%@", code, err);
+            result([NSString stringWithFormat:@"Login Failed: %d->%@", code, err]);
+        }];
     }else if([@"sdkLogout" isEqualToString:call.method]){
         [[TIMManager sharedInstance] logout:^{
             result(@"logout success");
@@ -75,12 +76,12 @@
     }else if([@"getConversations" isEqualToString:call.method]){
         
         NSArray *conversationList = [[TIMManager sharedInstance] getConversationList];
-        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-        for (TIMConversation *conversation in conversationList) {
-            DimConversation *dimConversation = [DimConversation initWithTIMConversation:conversation];
-            [dictArray addObject:dimConversation];
-        }
-        NSString *jsonString = [dictArray yy_modelToJSONString];
+//        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+//        for (TIMConversation *conversation in conversationList) {
+//            DimConversation *dimConversation = [DimConversation initWithTIMConversation:conversation];
+//            [dictArray addObject:dimConversation];
+//        }
+        NSString *jsonString = [conversationList yy_modelToJSONString];
         result(jsonString);
         
     }else if([@"delConversation" isEqualToString:call.method]){
@@ -95,12 +96,12 @@
         TIMConversation *con = [[TIMManager sharedInstance] getConversation: ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
         [con getMessage:count last:NULL succ:^(NSArray *msgs) {
             if(msgs != nil && msgs.count > 0){
-                NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-                for (TIMMessage *message in msgs) {
-                    DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
-                    [dictArray addObject:dimMessage];
-                }
-                NSString *jsonString = [dictArray yy_modelToJSONString];
+//                NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+//                for (TIMMessage *message in msgs) {
+//                    DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
+//                    [dictArray addObject:dimMessage];
+//                }
+                NSString *jsonString = [msgs yy_modelToJSONString];
                 result(jsonString);
             }else{
                 result(@"[]");
@@ -308,12 +309,12 @@
  */
 - (void)onNewMessage:(NSArray*)msgs{
     if(msgs != nil && msgs.count > 0){
-        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-        for (TIMMessage *message in msgs) {
-            DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
-            [dictArray addObject:dimMessage];
-        }
-        NSString *jsonString = [dictArray yy_modelToJSONString];
+//        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+//        for (TIMMessage *message in msgs) {
+//            DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
+//            [dictArray addObject:dimMessage];
+//        }
+        NSString *jsonString = [msgs yy_modelToJSONString];
         self.eventSink(jsonString);
     }else{
         self.eventSink(@"[]");

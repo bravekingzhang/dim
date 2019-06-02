@@ -18,8 +18,5 @@ A new flutter plugin project.
   s.dependency 'YYModel'
   s.dependency 'TXIMSDK_iOS'
   s.ios.deployment_target = '8.0'
-  s.vendored_frameworks = [
-
-  ]
 end
 
