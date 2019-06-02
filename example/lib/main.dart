@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   List<dynamic> _users = List();
 
   //在另外一个手机上测试改变下用户，靠这里了
-  int _currentUser = 1;
+  int _currentUser = 2;
 
   StreamSubscription<dynamic> _messageStreamSubscription;
 
@@ -38,6 +38,11 @@ class _MyAppState extends State<MyApp> {
       'username': 'hoolly2',
       'sig':
           "eJxlj11PgzAYhe-5FQ23GtMWitZkFzCQzYGZusTJTUPasnUOykfdmMb-bkSNJL63z5NzzvtuAQDsVfJ4kXOuXyvDzKmWNrgGNrTP-2BdK8Fyw5xW-IOyr1UrWV4Y2Q4QEUIwhGNHCVkZVagfY6v1fn-CI6ETL2xo*U5wIUSIUkLGitoMMI3up-P4bOZO8RsPFygLbsO7WfSwXdGle7PBMt5ldHn5VBwbo9dR76vA78or2bWxk2Yl75pFenimye4Y9aEIcl5yNU*0J5q1Q-zJZFRpVCl-X6KORz1vPOgg207pahAwRARhB36dbX1Yn7rbXZY_"
+    });
+    _users.add({
+      'username': 'hoolly3',
+      'sig':
+          "eJxlj1FPgzAYRd-5FYRXjGvpvjlMfGAbLosSBooaXxpcy6gr0LHCZMb-bkSNJN7Xc3Jv7rthmqZ1f3t3nm42VVNqqjvFLfPStJB19geVEoymmpKa-YP8TYma0zTTvO4hBgAHoaEjGC*1yMSPkVeVlB0ZCAe2o-3Kd8MYIYxdF2CoiG0PAz*Zr2Z7NurU1o*uJ91zvCinKOQPWZKx0zJ4sgsgEq8Xjz6MGuIJ38tfY97uZ7EXtNOV29hh-qLmqQwTb3dTQnGKeL4kMlpr*3g1mNSi4L*X3PEFAZgMaMvrg6jKXnAQBuwQ9BXL*DA*AesgXbg_"
     });
   }
 
