@@ -44,10 +44,8 @@ class Dim {
   }
 
   ///im登录
-  ///appid 参数ios登录是需要的，android可以随便传
-  Future<dynamic> imLogin(String appid,String identifier, String sig) async {
+  Future<dynamic> imLogin(String identifier, String sig) async {
     return await _methodChannel.invokeMethod("im_login", <String, dynamic>{
-      'appid':appid,
       'identifier': identifier,
       'userSig': sig,
     });

@@ -265,8 +265,7 @@ class _MyAppState extends State<MyApp> {
   ///第一个测试账号
   Future<void> login() async {
     try {
-      var result = await _dim.imLogin("1400119955",
-          _users[_currentUser]['username'], _users[_currentUser]['sig']);
+      var result = await _dim.imLogin(_users[_currentUser]['username'], _users[_currentUser]['sig']);
       print(result);
       setState(() {
         this._result = result;

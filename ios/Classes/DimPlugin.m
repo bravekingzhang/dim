@@ -30,8 +30,6 @@
         TIMSdkConfig *config = [[TIMSdkConfig alloc] init];
         config.sdkAppId = (int)appidInt;
         config.connListener = self;
-        config.logLevel = TIM_LOG_DEBUG;
-        
         
         //初始化 SDK
         int code = [[TIMManager sharedInstance] initSdk:config];
@@ -52,16 +50,15 @@
         }];
     }else if([@"im_login" isEqualToString:call.method]) {
     
-        NSString *appid = (NSString *)(call.arguments[@"appid"]);
         NSString *identifier = call.arguments[@"identifier"];
         NSString *userSig = call.arguments[@"userSig"];
         NSLog(@"identifier-->userSig:%@-->%@", identifier,userSig);
-        TIMLoginParam *login_param = [[TIMLoginParam alloc ]init];
+        TIMLoginParam *param = [[TIMLoginParam alloc ]init];
    
-        login_param.identifier = identifier;
-        login_param.userSig = userSig;
+        param.identifier = identifier;
+        param.userSig = userSig;
 
-        [[TIMManager sharedInstance] login: login_param succ:^(){
+        [[TIMManager sharedInstance] login: param succ:^(){
             result(@"Login Succ");
         } fail:^(int code, NSString * err) {
             NSLog(@"Login Failed: %d->%@", code, err);
