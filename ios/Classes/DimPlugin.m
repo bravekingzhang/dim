@@ -1,6 +1,6 @@
 #import "DimPlugin.h"
 #import <ImSDK/ImSDK.h>
-#import <YYModel.h>
+#import "YYModel.h"
 #import "DimModel.h"
 #import "MJExtension.h"
 

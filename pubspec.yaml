@@ -1,6 +1,6 @@
 name: dim
 description: 集成了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能。
-version: 0.2.0
+version: 0.2.1
 author: brzhang <1595819400@qq.com>
 homepage: https://gitee.com/gameOverFlow/dim
 
