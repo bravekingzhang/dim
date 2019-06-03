@@ -40,6 +40,14 @@ dependencies:
 2、随后在执行一次`pod install`
 
 
+### demo截图
+
+![截图](https://raw.githubusercontent.com/bravekingzhang/pic_go/master/20190603113634.png)
+
+
+![构建](https://raw.githubusercontent.com/bravekingzhang/pic_go/master/20190603113619.png)
+
+
 ## 已有的功能
 
 1. 初始化
