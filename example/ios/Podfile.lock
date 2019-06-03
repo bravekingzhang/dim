@@ -9,7 +9,7 @@ PODS:
 
 DEPENDENCIES:
   - dim (from `.symlinks/plugins/dim/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
   dim:
     :path: ".symlinks/plugins/dim/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
 
 SPEC CHECKSUMS:
   dim: ae59a19a626d16d27c2c33dd32681176eb40666d

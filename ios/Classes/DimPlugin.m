@@ -1,7 +1,8 @@
 #import "DimPlugin.h"
 #import <ImSDK/ImSDK.h>
 #import <YYModel.h>
-//#import "DimModel.h"
+#import "DimModel.h"
+#import "MJExtension.h"
 
 @interface DimPlugin() <TIMConnListener, TIMUserStatusListener, TIMRefreshListener, TIMMessageListener, FlutterStreamHandler>
 @property (nonatomic, strong) FlutterEventSink eventSink;
@@ -25,10 +26,10 @@
     if ([@"getPlatformVersion" isEqualToString:call.method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     }else if([ @"init" isEqualToString:call.method] ){
-        NSInteger appidInt = (NSInteger)call.arguments[@"appid"];
+        int appidInt = [call.arguments[@"appid"] intValue];
         //初始化 SDK 基本配置
         TIMSdkConfig *config = [[TIMSdkConfig alloc] init];
-        config.sdkAppId = (int)appidInt;
+        config.sdkAppId = appidInt;
         config.connListener = self;
         
         //初始化 SDK
@@ -73,14 +74,17 @@
     }else if([@"getConversations" isEqualToString:call.method]){
         
         NSArray *conversationList = [[TIMManager sharedInstance] getConversationList];
-//        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-//        for (TIMConversation *conversation in conversationList) {
-//            DimConversation *dimConversation = [DimConversation initWithTIMConversation:conversation];
-//            [dictArray addObject:dimConversation];
-//        }
-        NSString *jsonString = [conversationList yy_modelToJSONString];
-        result(jsonString);
-        
+        if (conversationList!=nil && conversationList.count>0) {
+            NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+            for (TIMConversation *conversation in conversationList) {
+                DimConversation *dimConversation = [DimConversation initWithTIMConversation:conversation ];
+                [dictArray addObject:dimConversation];
+            }
+             NSString *jsonString = [dictArray yy_modelToJSONString];
+            result(jsonString);
+        }else{
+            result(@"[]");
+        }
     }else if([@"delConversation" isEqualToString:call.method]){
         NSString *identifier = call.arguments[@"identifier"];
         [[TIMManager sharedInstance] deleteConversation:TIM_C2C receiver:identifier];
@@ -93,12 +97,12 @@
         TIMConversation *con = [[TIMManager sharedInstance] getConversation: ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
         [con getMessage:count last:NULL succ:^(NSArray *msgs) {
             if(msgs != nil && msgs.count > 0){
-//                NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-//                for (TIMMessage *message in msgs) {
-//                    DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
-//                    [dictArray addObject:dimMessage];
-//                }
-                NSString *jsonString = [msgs yy_modelToJSONString];
+                NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+                for (TIMMessage *message in msgs) {
+                    DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
+                    [dictArray addObject:dimMessage];
+                }
+                 NSString *jsonString = [dictArray yy_modelToJSONString];
                 result(jsonString);
             }else{
                 result(@"[]");
@@ -306,12 +310,12 @@
  */
 - (void)onNewMessage:(NSArray*)msgs{
     if(msgs != nil && msgs.count > 0){
-//        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
-//        for (TIMMessage *message in msgs) {
-//            DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
-//            [dictArray addObject:dimMessage];
-//        }
-        NSString *jsonString = [msgs yy_modelToJSONString];
+        NSMutableArray *dictArray = [[NSMutableArray alloc]init];
+        for (TIMMessage *message in msgs) {
+            DimMessage *dimMessage = [DimMessage initWithTIMMessage:message];
+            [dictArray addObject:dimMessage];
+        }
+        NSString *jsonString = [dictArray yy_modelToJSONString];
         self.eventSink(jsonString);
     }else{
         self.eventSink(@"[]");

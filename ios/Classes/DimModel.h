@@ -6,9 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <ImSDK/ImSDK.h>
 NS_ASSUME_NONNULL_BEGIN
-@class TIMUserProfile, TIMConversation, TIMMessage, TIMGroupMemberInfo, TIMElem;
+//@class TIMUserProfile, TIMConversation, TIMMessage, TIMGroupMemberInfo, TIMElem;
+
 
 @interface DimUser : NSObject
 @property (nonatomic, copy) NSString *identifier;
@@ -25,16 +26,16 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface DimConversation : NSObject
-@property (nonatomic, assign) NSInteger type;
-@property (nonatomic, copy) NSString *receiver;
-@property (nonatomic, copy) NSString *selfIdentifier;
+@property(nonatomic,assign) TIMConversationType type;
+@property (nonatomic, copy) NSString *peer;
 
 + (DimConversation *)initWithTIMConversation:(TIMConversation *)timConversation;
 @end
 
 @interface DimMessage : NSObject
 @property (nonatomic, strong) DimUser *senderProfile;
-@property (nonatomic, strong) TIMConversation *timConversation;
+@property (nonatomic, copy)   NSString *sender;
+@property (nonatomic, strong) DimConversation *timConversation;
 @property (nonatomic, strong) TIMGroupMemberInfo *timGroupMemberInfo;
 @property (nonatomic, strong) TIMElem *message;
 

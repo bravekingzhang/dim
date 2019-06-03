@@ -21,7 +21,9 @@ class _MyAppState extends State<MyApp> {
   List<dynamic> _users = List();
 
   //在另外一个手机上测试改变下用户，靠这里了
-  int _currentUser = 2;
+  int _currentUser = 1;
+
+  int appid = 1400215656;
 
   StreamSubscription<dynamic> _messageStreamSubscription;
 
@@ -257,7 +259,7 @@ class _MyAppState extends State<MyApp> {
   ///测试化测试，这里传自己应用的appid
   Future<void> init() async {
     try {
-      var result = await _dim.init(1400215656);
+      var result = await _dim.init(appid);
       print(result);
       setState(() {
         this._result = result;
