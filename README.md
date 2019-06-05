@@ -19,13 +19,13 @@ dim的使用非常简单，只需引入这个库就可以使用了。
 
 ```dart
 dependencies:
-  dim: ^0.2.0
+  dim: ^0.2.3
 ```
 
 不需要像我之前实现的版本那样进行一些繁琐的配置，因为云im升级之后，支持`maven`以及`pod`的引用方式啦。那么Android端
 
 
-### Android端改注意什么
+### Android端需要注意什么？
 
 1、混淆配置，在你的flutter的Android工程中配置混淆。
 
@@ -33,7 +33,7 @@ dependencies:
 -keep class com.tencent.** { *; }
 ```
 
-### IOS端注意什么
+### IOS端需要注意什么？
 
 1、请注意在你的flutter工程的ios项目根目录执行`pod update`[**非必须，如果报错建议执行一次**]
 

@@ -4,10 +4,11 @@ class Manger {
   factory Manger() {
     return _singleton;
   }
+
   Manger._internal() {
-     // initialization logic here
+    // initialization logic here
   }
-   // rest of the class
+// rest of the class
 }
 
 abstract class MessageListener {

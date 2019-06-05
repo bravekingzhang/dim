@@ -1,8 +1,8 @@
 name: dim
-description: 集成了腾讯imsdk，方便开发者可以在flutter上轻松的使用im功能。
-version: 0.2.1
+description: Convenient integration tencent imsdk, developers can easily use imsdk on flutter.Developers all need to do is to apply appid on imsdk platform application, then you can enjoy imsdk on flutter.The developer does not need to care about any configuration of the double platform。
+version: 0.2.3
 author: brzhang <1595819400@qq.com>
-homepage: https://gitee.com/gameOverFlow/dim
+homepage: https://github.com/bravekingzhang/dim
 
 dependencies:
   flutter:
