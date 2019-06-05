@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'dim'
-  s.version          = '0.2.3'
+  s.version          = '0.2.4'
   s.summary          = 'TIMSDK for flutter'
   s.description      = <<-DESC
 A new flutter plugin project.

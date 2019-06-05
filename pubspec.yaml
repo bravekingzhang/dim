@@ -1,6 +1,6 @@
 name: dim
-description: Convenient integration tencent imsdk, developers can easily use imsdk on flutter.Developers all need to do is to apply appid on imsdk platform application, then you can enjoy imsdk on flutter.The developer does not need to care about any configuration of the double platform。
-version: 0.2.3
+description: Convenient integration tencent imsdk, developers can easily use imsdk on flutter.Developers all need to do is to apply appid on imsdk platform application, then you can enjoy imsdk on flutter。
+version: 0.2.4
 author: brzhang <1595819400@qq.com>
 homepage: https://github.com/bravekingzhang/dim
 
