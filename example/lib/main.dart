@@ -64,7 +64,8 @@ class _MyAppState extends State<MyApp> {
 
     if (_messageStreamSubscription == null) {
       _messageStreamSubscription = _dim.onMessage.listen((dynamic onData) {
-        print("我监听到数据了$onData");
+        print(
+            "我监听到数据了$onData,需要在这里判断是你是消息列表还是需要刷新会话的请求。会话的请求是一个空的列表[],消息列表是有内容的");
       });
     }
   }
@@ -211,7 +212,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendTextMsg() async {
     try {
       var result = await _dim.sendTextMessages(
-          _users[_users.length - _currentUser-1]['username'], "haahah");
+          _users[_users.length - _currentUser - 1]['username'], "haahah");
       print(result);
       setState(() {
         this._result = result;
@@ -227,7 +228,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendImageMsg() async {
     try {
       var result = await _dim.sendImageMessages(
-          _users[_users.length - _currentUser-1]['username'], "tyyhuiijkoi.png");
+          _users[_users.length - _currentUser - 1]['username'],
+          "tyyhuiijkoi.png");
       print(result);
       setState(() {
         this._result = result;
@@ -243,7 +245,10 @@ class _MyAppState extends State<MyApp> {
   Future<void> sendLocationMsg() async {
     try {
       var result = await _dim.sendLocationMessages(
-          _users[_users.length - _currentUser-1]['username'], 113.93, 22.54, "腾讯大厦");
+          _users[_users.length - _currentUser - 1]['username'],
+          113.93,
+          22.54,
+          "腾讯大厦");
       print(result);
       setState(() {
         this._result = result;
@@ -272,7 +277,8 @@ class _MyAppState extends State<MyApp> {
   ///第一个测试账号
   Future<void> login() async {
     try {
-      var result = await _dim.imLogin(_users[_currentUser]['username'], _users[_currentUser]['sig']);
+      var result = await _dim.imLogin(
+          _users[_currentUser]['username'], _users[_currentUser]['sig']);
       print(result);
       setState(() {
         this._result = result;
@@ -297,7 +303,7 @@ class _MyAppState extends State<MyApp> {
   Future<dynamic> getMessages() async {
     try {
       var result = await _dim.getMessages(
-        _users[_users.length - _currentUser-1]['username'],
+        _users[_users.length - _currentUser - 1]['username'],
       );
       print(result);
       setState(() {
@@ -315,7 +321,7 @@ class _MyAppState extends State<MyApp> {
   void getUserInfo() async {
     try {
       List<String> users = List();
-      users.add(_users[_users.length - _currentUser-1]['username']);
+      users.add(_users[_users.length - _currentUser - 1]['username']);
       var result = await _dim.getUsersProfile(users);
       print(result);
       setState(() {

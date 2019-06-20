@@ -38,7 +38,6 @@ import com.tencent.imsdk.friendship.TIMFriend;
 import com.tencent.imsdk.friendship.TIMFriendRequest;
 import com.tencent.imsdk.friendship.TIMFriendResponse;
 import com.tencent.imsdk.friendship.TIMFriendResult;
-import com.tencent.imsdk.log.QLog;
 import com.tencent.imsdk.session.SessionWrapper;
 
 import java.util.ArrayList;
@@ -61,9 +60,11 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
     private Registrar registrar;
     private EventChannel.EventSink eventSink;
     private TIMMessageListener timMessageListener;
+    private TIMRefreshListener timRefreshListener;
 
     public DimPlugin(Registrar registrar) {
         this.registrar = registrar;
+        //消息监听器
         timMessageListener = new TIMMessageListener() {
             @Override
             public boolean onNewMessages(List<TIMMessage> list) {
@@ -74,10 +75,23 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                     }
                     eventSink.success(new Gson().toJson(messages, new TypeToken<Collection<Message>>() {
                     }.getType()));
-                } else {
-                    eventSink.success("[]");
                 }
                 return false;
+            }
+        };
+        //会话监听器
+        timRefreshListener = new TIMRefreshListener() {
+            @Override
+            public void onRefresh() {
+                eventSink.success("[]");
+            }
+
+            @Override
+            public void onRefreshConversation(List<TIMConversation> conversations) {
+//                if (conversations != null && conversations.size() > 0) {
+//                    eventSink.success(new Gson().toJson(conversations, new TypeToken<Collection<TIMConversation>>() {
+//                    }.getType()));
+//                }
             }
         };
     }
@@ -154,17 +168,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                             }
                         })
                         //设置会话刷新监听器
-                        .setRefreshListener(new TIMRefreshListener() {
-                            @Override
-                            public void onRefresh() {
-                                Log.i(TAG, "onRefresh");
-                            }
-
-                            @Override
-                            public void onRefreshConversation(List<TIMConversation> conversations) {
-                                Log.i(TAG, "onRefreshConversation, conversation size: " + conversations.size());
-                            }
-                        });
+                        .setRefreshListener(timRefreshListener);
 
                 //消息扩展用户配置
                 userConfig = new TIMUserConfigMsgExt(userConfig)
@@ -509,7 +513,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             String faceUrl = call.argument("faceUrl");
             HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_NICK, nick);
-            profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, gender==1?TIMFriendGenderType.GENDER_MALE:TIMFriendGenderType.GENDER_FEMALE);
+            profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, gender == 1 ? TIMFriendGenderType.GENDER_MALE : TIMFriendGenderType.GENDER_FEMALE);
             profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_FACEURL, faceUrl);
             TIMFriendshipManager.getInstance().modifySelfProfile(profileMap, new TIMCallBack() {
                 @Override

@@ -317,9 +317,14 @@
         }
         NSString *jsonString = [dictArray yy_modelToJSONString];
         self.eventSink(jsonString);
-    }else{
-        self.eventSink(@"[]");
     }
 }
 
+#pragma mark - TIMRefreshListener
+/**
+ *  会话列表变动
+ */
+- (void)onRefresh{
+    self.eventSink(@"[]");
+}
 @end
