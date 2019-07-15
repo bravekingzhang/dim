@@ -93,6 +93,18 @@ class Dim {
         <String, dynamic>{'identifier': identifier, 'image_path': imagePath});
   }
 
+  ///发送语音消息
+  ///soundPath   eg for android : Environment.getExternalStorageDirectory() + "/sound.mp3"
+  Future<dynamic> sendSoundMessages(String identifier, String soundPath,
+      [int duration = 10]) async {
+    return await _methodChannel.invokeMethod(
+        'sendSoundMessages', <String, dynamic>{
+      'identifier': identifier,
+      'sound_path': soundPath,
+      'duration': duration
+    });
+  }
+
   ///发送位置消息
   ///eg：
   ///lat 113.93

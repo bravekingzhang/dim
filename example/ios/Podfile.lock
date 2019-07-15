@@ -1,5 +1,5 @@
 PODS:
-  - dim (0.1.20):
+  - dim (0.2.5):
     - Flutter
     - TXIMSDK_iOS
     - YYModel
@@ -9,7 +9,7 @@ PODS:
 
 DEPENDENCIES:
   - dim (from `.symlinks/plugins/dim/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -20,10 +20,10 @@ EXTERNAL SOURCES:
   dim:
     :path: ".symlinks/plugins/dim/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
 
 SPEC CHECKSUMS:
-  dim: ae59a19a626d16d27c2c33dd32681176eb40666d
+  dim: 1dd5cb611ad61775b37b381f86bd1702b7e726f4
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   TXIMSDK_iOS: 46fd4c57411f140559d0222423cef27776722684
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30

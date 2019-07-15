@@ -130,12 +130,12 @@ class _MyAppState extends State<MyApp> {
                       },
                       child: Text('登出'),
                     ),
-//                    RaisedButton(
-//                      onPressed: () {
-//                        postData();
-//                      },
-//                      child: Text('测试发送数据'),
-//                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        postData();
+                      },
+                      child: Text('测试发送数据'),
+                    ),
 //                    RaisedButton(
 //                      onPressed: () {
 //                        canCelListener();

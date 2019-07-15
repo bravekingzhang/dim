@@ -151,6 +151,28 @@
             result([NSString stringWithFormat:@"send message failed. code: %d desc:%@", code, msg]);
         }];
         
+    }else if([@"sendSoundMessages" isEqualToString:call.method]){
+        NSString *identifier = call.arguments[@"identifier"];
+        NSString *soundpath = call.arguments[@"sound_path"];
+        int duration = [call.arguments[@"duration"] intValue];
+        //构造一条消息
+        TIMMessage *msg = [TIMMessage new];
+        
+        //添加声音
+        TIMSoundElem *elem = [TIMSoundElem new];
+        elem.path = soundpath;
+        elem.second = duration;
+        if([msg addElem:elem] != 0){
+            NSLog(@"addElement failed");
+        }
+        
+        TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
+        [conversation sendMessage:msg succ:^{
+            result(@"SendMsg ok");
+        } fail:^(int code, NSString *msg) {
+            result([NSString stringWithFormat:@"send message failed. code: %d desc:%@", code, msg]);
+        }];
+        
     }else if([@"sendLocation" isEqualToString:call.method]){
         NSString *identifier = call.arguments[@"identifier"];
         double lat = [call.arguments[@"lat"] doubleValue];
