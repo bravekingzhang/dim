@@ -41,6 +41,8 @@
     dimMessage.timConversation = [DimConversation initWithTIMConversation:timMessage.getConversation];
     dimMessage.timGroupMemberInfo = timMessage.getSenderGroupMemberProfile;
     dimMessage.message = [timMessage getElem:0];
+    dimMessage.timeStamp = timMessage.timestamp.timeIntervalSince1970;
+    
     return dimMessage;
 }
 @end

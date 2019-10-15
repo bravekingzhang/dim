@@ -548,6 +548,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         TIMUserProfile senderProfile;
         TIMConversation timConversation;
         TIMGroupMemberInfo timGroupMemberInfo;
+        long timeStamp;
         TIMElem message;
 
         Message(TIMMessage timMessage) {
@@ -564,6 +565,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
             });
             timConversation = timMessage.getConversation();
             message = timMessage.getElement(0);
+            timeStamp = timMessage.timestamp();
             timGroupMemberInfo = timMessage.getSenderGroupMemberProfile();
         }
     }
