@@ -281,6 +281,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         } else if (call.method.equals("sendTextMessages")) {
             String identifier = call.argument("identifier");
             String content = call.argument("content");
+            int type = call.argument("ctype");
             TIMMessage msg = new TIMMessage();
 
             //添加文本内容
@@ -292,7 +293,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 Log.d(TAG, "addElement failed");
                 return;
             }
-            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, identifier);
+            TIMConversation conversation = TIMManager.getInstance()
+                .getConversation(type == 2 ? TIMConversationType.Group : TIMConversationType.C2C, identifier);
             //发送消息
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
@@ -310,6 +312,7 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
         } else if (call.method.equals("sendImageMessages")) {
             String identifier = call.argument("identifier");
             String iamgePath = call.argument("image_path");
+            int type = call.argument("ctype");
             //构造一条消息
             TIMMessage msg = new TIMMessage();
 
@@ -322,7 +325,8 @@ public class DimPlugin implements MethodCallHandler, EventChannel.StreamHandler 
                 Log.d(TAG, "addElement failed");
                 return;
             }
-            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, identifier);
+            TIMConversation conversation = TIMManager.getInstance()
+                .getConversation(type == 2 ? TIMConversationType.Group : TIMConversationType.C2C, identifier);
 //发送消息
             conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
                 @Override
