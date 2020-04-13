@@ -42,7 +42,8 @@
     dimMessage.timGroupMemberInfo = timMessage.getSenderGroupMemberProfile;
     dimMessage.message = [timMessage getElem:0];
     dimMessage.timeStamp = timMessage.timestamp.timeIntervalSince1970;
-    
+    dimMessage.messageId = timMessage.msgId;
+
     return dimMessage;
 }
 @end

@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) TIMGroupMemberInfo *timGroupMemberInfo;
 @property (nonatomic, strong) TIMElem *message;
 @property (nonatomic, assign) NSTimeInterval timeStamp;
+@property (nonatomic, copy) NSString *messageId;
 
 + (DimMessage *)initWithTIMMessage:(TIMMessage *)timMessage;
 @end
