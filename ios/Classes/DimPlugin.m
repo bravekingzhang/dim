@@ -113,6 +113,7 @@
     }else if([@"sendTextMessages" isEqualToString:call.method]){
         NSString *identifier = call.arguments[@"identifier"];
         NSString *content = call.arguments[@"content"];
+        int ctype = [call.arguments[@"ctype"] intValue];
         TIMMessage *msg = [TIMMessage new];
         
         //添加文本内容
@@ -124,7 +125,7 @@
             NSLog(@"addElement failed");
             return;
         }
-        TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
+        TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
         //发送消息
         [conversation sendMessage:msg succ:^{
             result(@"send message ok");
@@ -134,6 +135,7 @@
     }else if([@"sendImageMessages" isEqualToString:call.method]){
         NSString *identifier = call.arguments[@"identifier"];
         NSString *iamgePath = call.arguments[@"image_path"];
+        int ctype = [call.arguments[@"ctype"] intValue];
         //构造一条消息
         TIMMessage *msg = [TIMMessage new];
         
@@ -144,7 +146,7 @@
             NSLog(@"addElement failed");
         }
         
-        TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:TIM_C2C receiver:identifier];
+        TIMConversation *conversation = [[TIMManager sharedInstance] getConversation:ctype==2 ? TIM_GROUP:TIM_C2C receiver:identifier];
         [conversation sendMessage:msg succ:^{
             result(@"SendMsg ok");
         } fail:^(int code, NSString *msg) {

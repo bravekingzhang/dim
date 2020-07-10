@@ -80,17 +80,18 @@ class Dim {
     });
   }
 
-  ///发送文本消息
-  Future<dynamic> sendTextMessages(String identifier, String content) async {
+  /// 发送文本消息
+  /// ctype 1 私信，2群聊  ,默认是私信
+  Future<dynamic> sendTextMessages(String identifier, String content, {int ctype = 1}) async {
     return await _methodChannel.invokeMethod('sendTextMessages',
-        <String, dynamic>{'identifier': identifier, 'content': content});
+        <String, dynamic>{'identifier': identifier, 'content': content, 'ctype': ctype});
   }
 
   ///发送图片消息
   ///imagePath   eg for android : Environment.getExternalStorageDirectory() + "/DCIM/Camera/1.jpg"
-  Future<dynamic> sendImageMessages(String identifier, String imagePath) async {
+  Future<dynamic> sendImageMessages(String identifier, String imagePath, {int ctype = 1}) async {
     return await _methodChannel.invokeMethod('sendImageMessages',
-        <String, dynamic>{'identifier': identifier, 'image_path': imagePath});
+        <String, dynamic>{'identifier': identifier, 'image_path': imagePath, 'ctype': ctype});
   }
 
   ///发送语音消息
